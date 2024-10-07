@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Client, Databases, Query } from "appwrite";
+
 import conf from "@/conf/conf";
+import { ProductDetails } from "@/types";
+
 
 const client = new Client()
   .setEndpoint(conf.appwriteUrl)

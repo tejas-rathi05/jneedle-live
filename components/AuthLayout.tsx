@@ -1,8 +1,8 @@
 "use client";
 
-import { useAppSelector } from "@/lib/store";
 import { useRouter } from "next/navigation";
 import React, { ReactNode, useEffect, useState } from "react";
+import { useAppSelector } from "@/lib/store";
 
 const AuthLayout = ({
   children,

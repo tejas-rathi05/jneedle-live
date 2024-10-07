@@ -1,18 +1,18 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { FaCircleCheck } from "react-icons/fa6";
+
 import authService from "@/appwrite/auth";
-import service from "@/appwrite/config";
 import AuthLayout from "@/components/AuthLayout";
 import LoginForm from "@/components/LoginForm";
 import { login, logout } from "@/lib/features/authSlice";
 import { AppDispatch, useAppSelector } from "@/lib/store";
-import { current } from "@reduxjs/toolkit";
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import conf from "@/conf/conf";
-import { useRouter } from "next/navigation";
-import { ProgressBarLink } from "@/components/ui/progress-bar";
+
 
 const page = () => {
   const router = useRouter()
@@ -48,13 +48,13 @@ const page = () => {
           </div>
 
           <div className="w-fit my-20">
-            <ProgressBarLink href={`${conf.baseURL}/products?category=all`}>
+            <Link href={`/products?category=all`}>
               <button className="hover:before:bg-white relative h-[50px] w-full overflow-hidden border border-stone-800 bg-stone-800 px-8 text-white shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-white before:transition-all before:duration-500 hover:text-stone-800 hover:before:left-0 hover:before:w-full">
                 <span className="relative z-10 w-full text-sm tracking-widest flex items-center justify-center">
                   SHOP ALL PRODUCTS
                 </span>
               </button>
-            </ProgressBarLink>
+            </Link>
           </div>
         </div>
       ) : (

@@ -1,8 +1,9 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { TfiLayoutGrid2Alt, TfiLayoutGrid3Alt } from "react-icons/tfi";
+import { motion } from "framer-motion";
 
 import FilterComponent from "@/components/FilterComponent";
 import SortComponent from "@/components/SortComponent";
@@ -11,7 +12,7 @@ import ProductCard from "@/components/ProductCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import conf from "@/conf/conf";
 import { useQuery } from "@tanstack/react-query";
-import { motion } from "framer-motion";
+import { ProductDetails } from "@/types";
 
 const ProductsPage = () => {
   const router = useRouter();

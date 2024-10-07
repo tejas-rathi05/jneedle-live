@@ -1,7 +1,6 @@
-import { formatPrice } from "@/helpers";
 import Link from "next/link";
 import React from "react";
-import { ProgressBarLink } from "./ui/progress-bar";
+import { formatPrice } from "@/helpers";
 
 const ProductCard = (product: any) => {
   console.log(product)
@@ -10,7 +9,7 @@ const ProductCard = (product: any) => {
       key={product.product.$id}
       className="w-full h-full flex justify-center mb-5 cursor-pointer group"
     >
-      <ProgressBarLink href={`/products/${product.product.$id}`} className="w-full h-full">
+      <Link href={`/products/${product.product.$id}`} className="w-full h-full">
         <div className="overflow-hidden">
           <img
             key={product.product.imgurl[0]["$id"]}
@@ -28,7 +27,7 @@ const ProductCard = (product: any) => {
             {formatPrice(product.product.price)}
           </p>
         </div>
-      </ProgressBarLink>
+      </Link>
     </div>
   );
 };

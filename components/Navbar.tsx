@@ -1,11 +1,13 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import service from "@/appwrite/config";
+import conf from "@/conf/conf";
+
 import {
-  Menu,
   Search,
   ShoppingBag,
-  ShoppingCart,
-  UserRound,
 } from "lucide-react";
 import {
   Tooltip,
@@ -14,16 +16,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import SearchInput from "@/components/SearchInput";
-import LogoutBtn from "./LogoutBtn";
-import { Button } from "./ui/button";
-import UserProfileBtn from "./UserProfileBtn";
+import { Button } from "@/components/ui/button";
+import UserProfileBtn from "@/components/UserProfileBtn";
 import { useAppSelector } from "@/lib/store";
-import { useEffect, useState } from "react";
-import service from "@/appwrite/config";
-import conf from "@/conf/conf";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { SideNav } from "./SideNav";
-import { ProgressBarLink } from "./ui/progress-bar";
+import { useQuery } from "@tanstack/react-query";
+import { SideNav } from "@/components/SideNav";
+import { UserCartItem } from "@/types";
 
 const Navbar = () => {
   const authStatus = useAppSelector((state) => state.auth.status);
@@ -51,7 +49,7 @@ const Navbar = () => {
   const navQuery = useQuery({
     queryKey: ["Pages"],
     queryFn: async () => {
-      const res = await fetch("/api/pages/fetch-all-pages", {
+      const res = await fetch(`${conf.baseURL}/api/pages/fetch-all-pages`, {
         method: "GET",
       });
       const data = res.json();
@@ -88,13 +86,14 @@ const Navbar = () => {
 
   return (
     <nav>
+      
       <div className="relative w-full z-30 h-[80px] lg:h-[100px] flex justify-between items-center border-b bg-white">
         <div className="flex justify-center lg:justify-between items-center mx-auto w-full max-w-screen-2xl px-5 md:px-10 lg:px-20">
           <div className="lg:hidden flex absolute left-5">
             <SideNav />
           </div>
 
-          <ProgressBarLink href="/">
+          <Link href="/">
             <div className="size-[60px] lg:size-[80px] cursor-pointer">
               <img
                 src="/images/logo/logo.png"
@@ -104,7 +103,7 @@ const Navbar = () => {
                 height={80}
               />
             </div>
-          </ProgressBarLink>
+          </Link>
 
           <div className="flex gap-x-2 xl:gap-x-5 max-lg:hidden">
             {navQuery.isSuccess &&
@@ -112,8 +111,8 @@ const Navbar = () => {
               navQuery.data.map((item: any, index: number) => {
                 console.log(item);
                 return (
-                  <ProgressBarLink
-                    href={`${conf.baseURL}/collections${item.href}`}
+                  <Link
+                    href={`/collections${item.href}`}
                   >
                     <div className="relative p-2 cursor-pointer hover:font-bold transition-all ease-in-out duration-150">
                       {typeof item.navLink === "string" && (
@@ -134,25 +133,25 @@ const Navbar = () => {
                           </button>
                         )}
                     </div>
-                  </ProgressBarLink>
+                  </Link>
                 );
               })}
             
-            <ProgressBarLink href="">
+            <Link href="">
               <div className="relative p-2 cursor-pointer hover:font-bold transition-all ease-in-out duration-150">
                 <Button variant="linkHover2" className="text-xs">
                   SALE
                 </Button>
               </div>
-            </ProgressBarLink>
+            </Link>
 
-            <ProgressBarLink href="/#about-us">
+            <Link href="/#about-us">
               <div className="relative p-2 cursor-pointer hover:font-bold transition-all ease-in-out duration-150">
                 <Button variant="linkHover2" className="text-xs">
                   ABOUT US
                 </Button>
               </div>
-            </ProgressBarLink>
+            </Link>
           </div>
 
           <div className="flex gap-x-1 lg:gap-x-2 items-center justify-center absolute right-5 top-0 lg:relative h-full">
@@ -172,7 +171,7 @@ const Navbar = () => {
               </Tooltip>
             </TooltipProvider>
 
-            <ProgressBarLink href="/cart">
+            <Link href="/cart">
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -192,18 +191,18 @@ const Navbar = () => {
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
-            </ProgressBarLink>
+            </Link>
 
             {authStatus ? (
               <div className="hidden sm:block">
                 <UserProfileBtn />
               </div>
             ) : (
-              <ProgressBarLink href="/login">
+              <Link href="/login">
                 <Button variant="gooeyLeft" className="ml-3 max-sm:hidden">
                   Log In
                 </Button>
-              </ProgressBarLink>
+              </Link>
             )}
           </div>
         </div>

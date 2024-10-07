@@ -1,6 +1,7 @@
-import service from "@/appwrite/config";
-import { NextApiRequest } from "next";
 import { NextRequest, NextResponse } from "next/server";
+
+import service from "@/appwrite/config";
+
 
 // pages/api/products.js
 export  async function GET(req:NextRequest, res: NextResponse) {

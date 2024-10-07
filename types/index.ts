@@ -1,4 +1,23 @@
-interface NewProductProps{
+export type Product = {
+  $id: string;
+  imgurl: {
+    id: string;
+    name: string;
+    previewUrl: string;
+  }[];
+  name: string;
+  productCategory: {
+    $id: string;
+    name: string;
+  };
+  price: number;
+  sku: string;
+  archived: boolean;
+  featured: boolean;
+};
+
+
+export type NewProductProps = {
   width: number,
   category: string,
   color: string,
@@ -12,33 +31,15 @@ interface NewProductProps{
   images: string,
 }
 
-interface UpdateProductProps{
-  product_length: number,
-  product_breadth: number,
-  product_height: number,
-  product_color: string,
-  product_desc: string,
-  product_name: string,
-  product_price: number,
-  product_quantity: number,
-  product_inventory_sku: string,
-}
 
-interface UploadedFile {
-  id: string;
-  name: string;
-  url: string;
-  previewUrl?: string;
-}
-
-interface UserCartHandlerProps{
+export type UserCartHandlerProps = {
   userId: string,
   productId: string,
   quantity: number,
   product: any
 }
 
-interface ProductDetails {
+export type ProductDetails = {
   $id: string;
   length: number;
   width: number;
@@ -53,7 +54,7 @@ interface ProductDetails {
   productInventory: [];
 };
 
-interface ProductDetailsNotParsed {
+export type ProductDetailsNotParsed = {
   $id: string;
   length: number;
   width: number;
@@ -68,12 +69,12 @@ interface ProductDetailsNotParsed {
   productInventory: [];
 };
 
-interface ProductCategory{
+export type ProductCategory = {
   name: string;
   $id: string;
 }
 
-interface UserCartItem {
+export type UserCartItem = {
   userId?: string;
   $id?: string | undefined;
   id?: string;
@@ -85,20 +86,20 @@ interface UserCartItem {
   imgurl?: [];
 }
 
-interface UpdateUserParams {
+export type UpdateUserParams = {
   name?: string;
   password?: string;
   mobile_number?: string;
 }
 
-interface UpdateUserResponse {
+export type UpdateUserResponse = {
   $id: string;
   name: string;
   password: string;
   mobile_number: string;
 }
 
-interface NewAddressProps{
+export type NewAddressProps = {
   firstName: string,
   lastName: string,
   phone: string,

@@ -1,10 +1,15 @@
 "use client";
 
-import service from "@/appwrite/config";
+import Link from "next/link";
+import React, { useState } from "react";
 import { useAppSelector } from "@/lib/store";
-import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
+import { formatPrice } from "@/helpers";
+import { Minus, Plus, ShoppingBag } from "lucide-react";
+import { FaTrashAlt } from "react-icons/fa";
+import service from "@/appwrite/config";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -13,13 +18,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Minus, Plus, ShoppingBag } from "lucide-react";
-import { formatPrice } from "@/helpers";
-import { FaTrashAlt } from "react-icons/fa";
-import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Skeleton } from "../ui/skeleton";
-import { ProgressBarLink } from "../ui/progress-bar";
+import { Skeleton } from "@/components/ui/skeleton";
+import { UserCartItem } from "@/types";
 
 const UserCart = () => {
   const router = useRouter();
@@ -48,21 +49,6 @@ const UserCart = () => {
 
   console.log(cartItems);
 
-  // useEffect(() => {
-  //   const fetchCartItems = async () => {
-  //     const userId = userData?.userData?.$id ?? userData?.$id;
-  //     const cartData = await service.getCartItems(userId);
-  //     if (cartData) {
-  //       const transformedCartData = transformCartData(cartData);
-  //       console.log("transformed: ", transformedCartData);
-  //       setCartItems(transformedCartData);
-  //     } else {
-  //       setCartItems([]);
-  //     }
-  //   };
-
-  //   fetchCartItems();
-  // }, [userData.$id]);
 
   const transformCartData = (cartData: any[]): UserCartItem[] => {
     return cartData.map((item) => {
@@ -172,13 +158,13 @@ const UserCart = () => {
                       <TableCell className="font-medium">
                         <div>
                           {item.product ? (
-                            <ProgressBarLink href={`/products/${item.product.$id}`}>
+                            <Link href={`/products/${item.product.$id}`}>
                               <img
                                 src={imgUrl[0]["previewUrl"]}
                                 alt={item.product.name}
                                 className="w-[100px] h-[100px] object-contain"
                               />
-                            </ProgressBarLink>
+                            </Link>
                           ) : (
                             <p>No image available</p>
                           )}
@@ -267,7 +253,7 @@ const UserCart = () => {
               <ShoppingBag size={40} className="text-muted-foreground" />
               <p className="text-muted-foreground mt-3">YOUR CART IS EMPTY!</p>
             </div>
-            <ProgressBarLink href="/products">
+            <Link href="/products">
               <div className="w-fit py-10">
                 <button className="hover:before:bg-white relative h-[50px] w-full overflow-hidden border border-stone-800 bg-stone-800 px-8 text-white shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-white before:transition-all before:duration-500 hover:text-stone-800 hover:before:left-0 hover:before:w-full">
                   <span className="relative z-10 w-full text-sm tracking-widest flex items-center justify-center">
@@ -275,7 +261,7 @@ const UserCart = () => {
                   </span>
                 </button>
               </div>
-            </ProgressBarLink>
+            </Link>
           </div>
         )}
       </div>

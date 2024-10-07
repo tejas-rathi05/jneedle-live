@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { ImagesSlider } from "./ui/images-slider";
+import { ImagesSlider } from "@/components/ui/images-slider";
 
 // Define type for images object
 type Images = {

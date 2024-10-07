@@ -1,5 +1,9 @@
 "use client";
 
+import { ArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { FaTrashAlt } from "react-icons/fa";
+
 import service from "@/appwrite/config";
 import AuthLayout from "@/components/AuthLayout";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
@@ -15,12 +19,8 @@ import {
 } from "@/components/ui/dialog";
 import { useAppSelector } from "@/lib/store";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Edit, Trash } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { AiFillEdit } from "react-icons/ai";
 import React from "react";
-import { FaTrashAlt } from "react-icons/fa";
-import EditAddressForm from "@/components/UpdateAddressForm";
 import UpdateAddressForm from "@/components/UpdateAddressForm";
 
 const page = () => {

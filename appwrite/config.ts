@@ -1,14 +1,11 @@
-import { Product } from "@/app/admin/products/columns";
+import { Client, ID, Databases, Storage, Query } from "appwrite";
+
 import conf from "@/conf/conf";
 import {
-  Client,
-  ID,
-  Databases,
-  Storage,
-  Query,
-  Permission,
-  Role,
-} from "appwrite";
+  NewProductProps,
+  UpdateUserParams,
+  UserCartHandlerProps,
+} from "@/types";
 
 export class Service {
   client = new Client();
@@ -24,6 +21,9 @@ export class Service {
     this.bucket = new Storage(this.client);
   }
 
+  /*------------------------------------------------------------------------
+  ---------------------------- USER ----------------------------------------
+  ------------------------------------------------------------------------*/
   async createUser({ email, password }: { email: string; password: string }) {
     try {
       return await this.databases.createDocument(
@@ -60,6 +60,129 @@ export class Service {
     }
   }
 
+  /*------------------------------------------------------------------------
+  ---------------------------- USER ADDRESS --------------------------------
+  ------------------------------------------------------------------------*/
+  async addNewAddress(payload: any) {
+    try {
+      // Check if the new address is set as default
+      if (payload.isDefault) {
+        // Fetch all addresses for the user
+        const userAddresses = await this.getUserAddress(payload.userId);
+
+        // Update all addresses to set isDefault to false
+        if (userAddresses) {
+          const updatePromises = userAddresses.map((address: any) => {
+            if (address.$id !== payload.$id) {
+              // Avoid updating the current new address
+              return this.updateUserAddress(address.$id, { isDefault: false });
+            }
+          });
+          await Promise.all(updatePromises);
+        }
+      }
+
+      // Add the new address
+      const response = await this.databases.createDocument(
+        conf.appwriteDatabaseId,
+        conf.appwriteUserAddressCollectionId,
+        ID.unique(),
+        payload
+      );
+      return response;
+    } catch (error) {
+      console.error("Appwrite service :: addNewAddress :: error: ", error);
+    }
+  }
+
+  async getUserAddress(userId: string) {
+    try {
+      const response = await this.databases.listDocuments(
+        conf.appwriteDatabaseId,
+        conf.appwriteUserAddressCollectionId,
+        [Query.equal("userId", userId)]
+      );
+      return response.documents;
+    } catch (error) {
+      console.error("Appwrite service :: addNewAddress :: error: ", error);
+    }
+  }
+
+  async updateUserAddress(addressId: string, payload: any) {
+    try {
+      // Check if the address is set as default
+      if (payload.isDefault) {
+        // Fetch all addresses for the user
+        const userAddresses = await this.getUserAddress(payload.userId);
+
+        // Update all addresses to set isDefault to false
+        if (userAddresses) {
+          const updatePromises = userAddresses.map((address: any) => {
+            if (address.$id !== addressId) {
+              // Avoid updating the address being updated
+              return this.updateUserAddress(address.$id, { isDefault: false });
+            }
+          });
+          await Promise.all(updatePromises);
+        }
+      }
+
+      // Update the address
+      const response = await this.databases.updateDocument(
+        conf.appwriteDatabaseId,
+        conf.appwriteUserAddressCollectionId,
+        addressId,
+        payload
+      );
+      return response;
+    } catch (error) {
+      console.error("Appwrite service :: updateUserAddress :: error: ", error);
+    }
+  }
+
+  async setPrimaryAddress(userId: string, addressId: string) {
+    try {
+      // Fetch all addresses for the user
+      const userAddresses = await this.getUserAddress(userId);
+
+      // Update all addresses to set isDefault to false except the one being set as default
+      if (userAddresses) {
+        const updatePromises = userAddresses.map((address: any) => {
+          if (address.$id !== addressId) {
+            return this.updateUserAddress(address.$id, { isDefault: false });
+          }
+        });
+        await Promise.all(updatePromises);
+      }
+
+      // Set the specified address as default
+      const response = await this.updateUserAddress(addressId, {
+        isDefault: true,
+      });
+
+      return response;
+    } catch (error) {
+      console.error("Appwrite service :: setDefaultAddress :: error: ", error);
+    }
+  }
+
+  async deleteUserAddress(addressId: string) {
+    try {
+      const res = await this.databases.deleteDocument(
+        conf.appwriteDatabaseId,
+        conf.appwriteUserAddressCollectionId,
+        addressId // Accessing $id property directly
+      );
+      return "Address deleted successfully!";
+    } catch (error) {
+      console.error("Appwrite service :: deleteProduct :: error: ", error);
+      return "Error deleting products";
+    }
+  }
+
+  /*------------------------------------------------------------------------
+  ---------------------------- FILE BUCKET ---------------------------------
+  ------------------------------------------------------------------------*/
   async uploadFile(file: File): Promise<{ id: string; name: string }> {
     try {
       const response = await this.bucket.createFile(
@@ -125,6 +248,9 @@ export class Service {
     }
   }
 
+  /*------------------------------------------------------------------------
+  ---------------------------- PRODUCT CATEGORY ----------------------------
+  ------------------------------------------------------------------------*/
   async getAllProductCategories() {
     try {
       const response = await this.databases.listDocuments(
@@ -159,75 +285,9 @@ export class Service {
     }
   }
 
-  async uploadProductInventory({
-    quantity,
-    inventory_sku,
-  }: {
-    quantity: number;
-    inventory_sku: string;
-  }) {
-    try {
-      const response = await this.databases.createDocument(
-        conf.appwriteDatabaseId,
-        conf.appwriteProductInventoryCollectionId,
-        ID.unique(),
-        {
-          quantity,
-          sku: inventory_sku,
-        }
-      );
-
-      return response.$id;
-    } catch (error) {
-      console.log(
-        "Appwrite service :: uploadProductInventory :: error: ",
-        error
-      );
-      throw error;
-    }
-  }
-
-  async addNewProduct({
-    name,
-    desc,
-    category,
-    price,
-    quantity,
-    width,
-    height,
-    length,
-    color,
-    inventory_sku,
-    images,
-  }: NewProductProps) {
-    try {
-      // const categoryId = await this.getProductCategoryId(category);
-      const inventoryId = await this.uploadProductInventory({
-        quantity,
-        inventory_sku,
-      });
-      await this.databases.createDocument(
-        conf.appwriteDatabaseId,
-        conf.appwriteProductCollectionId,
-        ID.unique(),
-        {
-          name,
-          desc,
-          price,
-          width,
-          height,
-          length,
-          color,
-          imgurl: images,
-          productCategory: category,
-          productInventory: inventoryId,
-        }
-      );
-    } catch (error) {
-      console.log("Appwrite service :: addNewProduct :: error: ", error);
-    }
-  }
-
+  /*------------------------------------------------------------------------
+  ---------------------------- PRODUCT -------------------------------------
+  ------------------------------------------------------------------------*/
   async getAllProducts() {
     try {
       const response = await this.databases.listDocuments(
@@ -258,58 +318,9 @@ export class Service {
     }
   }
 
-  async updateProduct({
-    productId,
-    productInventoryId,
-    updatedData,
-  }: {
-    productId: string;
-    productInventoryId: string;
-    updatedData: UpdateProductProps;
-  }) {
-    try {
-      const response = await this.databases.updateDocument(
-        conf.appwriteDatabaseId,
-        conf.appwriteProductCollectionId,
-        productId,
-        {
-          name: updatedData.product_name,
-          desc: updatedData.product_desc,
-          price: updatedData.product_price,
-          width: updatedData.product_breadth,
-          height: updatedData.product_height,
-          length: updatedData.product_length,
-          color: updatedData.product_color,
-          productInventory: {
-            $id: productInventoryId,
-            quantity: updatedData.product_quantity,
-            sku: updatedData.product_inventory_sku,
-          },
-        }
-      );
-
-      return response.documents;
-    } catch (error) {
-      console.log("Appwrite service :: updateProduct :: error: ", error);
-    }
-  }
-
-  async deleteProduct(productArr: Product[]) {
-    try {
-      for (const product of productArr) {
-        await this.databases.deleteDocument(
-          conf.appwriteDatabaseId,
-          conf.appwriteProductCollectionId,
-          product.$id // Accessing $id property directly
-        );
-      }
-      return "Product(s) deleted successfully!";
-    } catch (error) {
-      console.error("Appwrite service :: deleteProduct :: error: ", error);
-      return "Error deleting products";
-    }
-  }
-
+  /*------------------------------------------------------------------------
+  ---------------------------- CART ----------------------------------------
+  ------------------------------------------------------------------------*/
   async addCartItem({
     userId,
     productId,
@@ -406,125 +417,10 @@ export class Service {
     }
   }
 
-  async addNewAddress(payload: any) {
-    try {
-      // Check if the new address is set as default
-      if (payload.isDefault) {
-        // Fetch all addresses for the user
-        const userAddresses = await this.getUserAddress(payload.userId);
-
-        // Update all addresses to set isDefault to false
-        if (userAddresses) {
-          const updatePromises = userAddresses.map((address: any) => {
-            if (address.$id !== payload.$id) {
-              // Avoid updating the current new address
-              return this.updateUserAddress(address.$id, { isDefault: false });
-            }
-          });
-          await Promise.all(updatePromises);
-        }
-      }
-
-      // Add the new address
-      const response = await this.databases.createDocument(
-        conf.appwriteDatabaseId,
-        conf.appwriteUserAddressCollectionId,
-        ID.unique(),
-        payload
-      );
-      return response;
-    } catch (error) {
-      console.error("Appwrite service :: addNewAddress :: error: ", error);
-    }
-  }
-
-  async getUserAddress(userId: string) {
-    try {
-      const response = await this.databases.listDocuments(
-        conf.appwriteDatabaseId,
-        conf.appwriteUserAddressCollectionId,
-        [Query.equal("userId", userId)]
-      );
-      return response.documents;
-    } catch (error) {
-      console.error("Appwrite service :: addNewAddress :: error: ", error);
-    }
-  }
-
-  async updateUserAddress(addressId: string, payload: any) {
-    try {
-      // Check if the address is set as default
-      if (payload.isDefault) {
-        // Fetch all addresses for the user
-        const userAddresses = await this.getUserAddress(payload.userId);
-
-        // Update all addresses to set isDefault to false
-        if (userAddresses) {
-          const updatePromises = userAddresses.map((address: any) => {
-            if (address.$id !== addressId) {
-              // Avoid updating the address being updated
-              return this.updateUserAddress(address.$id, { isDefault: false });
-            }
-          });
-          await Promise.all(updatePromises);
-        }
-      }
-
-      // Update the address
-      const response = await this.databases.updateDocument(
-        conf.appwriteDatabaseId,
-        conf.appwriteUserAddressCollectionId,
-        addressId,
-        payload
-      );
-      return response;
-    } catch (error) {
-      console.error("Appwrite service :: updateUserAddress :: error: ", error);
-    }
-  }
-
-  async setPrimaryAddress(userId: string, addressId: string) {
-    try {
-      // Fetch all addresses for the user
-      const userAddresses = await this.getUserAddress(userId);
-
-      // Update all addresses to set isDefault to false except the one being set as default
-      if (userAddresses) {
-        const updatePromises = userAddresses.map((address: any) => {
-          if (address.$id !== addressId) {
-            return this.updateUserAddress(address.$id, { isDefault: false });
-          }
-        });
-        await Promise.all(updatePromises);
-      }
-
-
-      // Set the specified address as default
-      const response = await this.updateUserAddress(addressId, {
-        isDefault: true,
-      });
-
-      return response;
-    } catch (error) {
-      console.error("Appwrite service :: setDefaultAddress :: error: ", error);
-    }
-  }
-
-  async deleteUserAddress(addressId: string) {
-    try {
-        const res = await this.databases.deleteDocument(
-          conf.appwriteDatabaseId,
-          conf.appwriteUserAddressCollectionId,
-          addressId // Accessing $id property directly
-        );
-      return "Address deleted successfully!";
-    } catch (error) {
-      console.error("Appwrite service :: deleteProduct :: error: ", error);
-      return "Error deleting products";
-    }
-  }
-
-  // CMS CALLS------------------------------------
+  
+  /*------------------------------------------------------------------------
+  ---------------------------- CMS FUNCTIONS -------------------------------
+  ------------------------------------------------------------------------*/
   async getAllPages() {
     try {
       const response = await this.databases.listDocuments(

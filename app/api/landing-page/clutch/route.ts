@@ -1,7 +1,8 @@
-import service from "@/appwrite/config";
+import { NextRequest, NextResponse } from "next/server";
+
 import conf from "@/conf/conf";
 import { getRandomProducts } from "@/helpers";
-import { NextRequest, NextResponse } from "next/server";
+
 
 export async function GET(req: NextRequest) {
   try {

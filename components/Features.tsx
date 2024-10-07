@@ -1,5 +1,6 @@
 import React from "react";
-import MaxWidthWrapper from "./MaxWidthWrapper";
+
+import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import { RiHandHeartFill, RiMedalFill } from "react-icons/ri";
 import { FaTruckFast } from "react-icons/fa6";
 import { GiEcology } from "react-icons/gi";

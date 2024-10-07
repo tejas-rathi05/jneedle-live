@@ -1,5 +1,13 @@
 "use client";
 
+import React from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { newAddressSchema } from "@/types/zod";
+import service from "@/appwrite/config";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+
 import {
   Form,
   FormControl,
@@ -11,15 +19,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import React from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { newAddressSchema } from "@/types/zod";
-import service from "@/appwrite/config";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Button } from "./ui/button";
-import { toast, Toaster } from "sonner";
-import { Spinner } from "./ui/spinner";
+import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
+import { NewAddressProps } from "@/types";
 
 const UpdateAddressForm = ({
   currentUserId,
@@ -251,7 +253,6 @@ const UpdateAddressForm = ({
           </div>
         </form>
       </Form>
-
     </>
   );
 };

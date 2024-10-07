@@ -1,19 +1,21 @@
-import service from "@/appwrite/config";
-import { getRandomProducts } from "@/helpers";
 import { NextRequest, NextResponse } from "next/server";
+
+import service from "@/appwrite/config";
+import { Product } from "@/types";
+
 
 export async function GET(req: NextRequest) {
   try {
     const response = await service.getAllProducts();
 
     if (response) {
-      const products = response.map((product) => ({
+      const products:Product[]= response.map((product:any) => ({
         ...product,
         imgurl:
           typeof product.imgurl === "string" ? JSON.parse(product.imgurl) : [],
       }));
 
-      const selectedProducts = getRandomProducts(products, 4);
+      const selectedProducts = products.filter(product => product.featured === true);
       
       return NextResponse.json(selectedProducts);
     }

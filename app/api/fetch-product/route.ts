@@ -1,5 +1,7 @@
-import service from "@/appwrite/config";
 import { NextRequest, NextResponse } from "next/server";
+
+import service from "@/appwrite/config";
+
 
 export async function GET(req: NextRequest) {
   try {

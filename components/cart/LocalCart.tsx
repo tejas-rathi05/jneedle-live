@@ -1,8 +1,12 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+import { useDispatch } from "react-redux";
+import { FaTrashAlt } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -14,13 +18,7 @@ import {
 import { updateQuantity, removeFromCart } from "@/lib/features/cartSlice";
 import { AppDispatch, useAppSelector } from "@/lib/store";
 import { Minus, Plus, ShoppingBag } from "lucide-react";
-import { useDispatch } from "react-redux";
-import { FaTrashAlt } from "react-icons/fa";
 import { formatPrice } from "@/helpers";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import conf from "@/conf/conf";
-import { ProgressBarLink } from "../ui/progress-bar";
 
 const LocalCart = () => {
   const router = useRouter();
@@ -80,7 +78,7 @@ const LocalCart = () => {
                 {cartItems.map((item) => (
                   <TableRow key={item.id} className="border-none">
                     <TableCell className="font-medium">
-                      <ProgressBarLink href={`${conf.baseURL}/products/${item.id}`}>
+                      <Link href={`/products/${item.id}`}>
                         <div>
                           <img
                             src={item.imgurl[0].previewUrl}
@@ -88,7 +86,7 @@ const LocalCart = () => {
                             className="w-[100px] h-[100px] object-contain"
                           />
                         </div>
-                      </ProgressBarLink>
+                      </Link>
                     </TableCell>
                     <TableCell>
                       <div className="flex justify-center items-center w-32 border">
@@ -161,7 +159,7 @@ const LocalCart = () => {
               <ShoppingBag size={40} className="text-muted-foreground" />
               <p className="text-muted-foreground mt-3">YOUR CART IS EMPTY!</p>
             </div>
-            <ProgressBarLink href="/products">
+            <Link href="/products">
               <div className="w-fit py-10">
                 <button className="hover:before:bg-white relative h-[50px] w-full overflow-hidden border border-stone-800 bg-stone-800 px-8 text-white shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-white before:transition-all before:duration-500 hover:text-stone-800 hover:before:left-0 hover:before:w-full">
                   <span className="relative z-10 w-full text-sm tracking-widest flex items-center justify-center">
@@ -169,7 +167,7 @@ const LocalCart = () => {
                   </span>
                 </button>
               </div>
-            </ProgressBarLink>
+            </Link>
           </div>
         )}
       </div>

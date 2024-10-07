@@ -1,6 +1,10 @@
-import { LogOut, PanelsTopLeft, User, UserRound } from "lucide-react";
+import authService from "@/appwrite/auth";
+import { logout } from "@/lib/features/authSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch, useAppSelector } from "@/lib/store";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,15 +13,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import authService from "@/appwrite/auth";
-import { logout } from "@/lib/features/authSlice";
-import { useDispatch } from "react-redux";
-import { AppDispatch, useAppSelector } from "@/lib/store";
-import Link from "next/link";
+import { LogOut, PanelsTopLeft, User, UserRound } from "lucide-react";
 import { DropdownMenuLabel } from "@radix-ui/react-dropdown-menu";
-import { useRouter } from "next/navigation";
-import { ProgressBarLink } from "./ui/progress-bar";
 
 export default function UserProfileBtn() {
   const router = useRouter();
@@ -50,20 +47,20 @@ export default function UserProfileBtn() {
         <DropdownMenuGroup>
           {isAdmin && (
             <DropdownMenuItem className="">
-              <ProgressBarLink href="/admin/dashboard" className="flex w-full h-full">
+              <Link href="/admin/dashboard" className="flex w-full h-full">
                 <PanelsTopLeft className="mr-2 h-4 w-4" />
                 <span>Dashboard</span>
-              </ProgressBarLink>
+              </Link>
             </DropdownMenuItem>
           )}
         </DropdownMenuGroup>
 
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <ProgressBarLink href="/my-account" className="flex w-full h-full">
+            <Link href="/my-account" className="flex w-full h-full">
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>
-            </ProgressBarLink>
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
 

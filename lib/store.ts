@@ -1,6 +1,5 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authReducer from "@/lib/features/authSlice";
-import sidebarReducer from "@/lib/features/sidebarSlice";
 import cartReducer from "@/lib/features/cartSlice";
 import { TypedUseSelectorHook, useSelector } from "react-redux";
 import {
@@ -22,7 +21,6 @@ const persistConfig = {
 
 const reducer = combineReducers({
   auth: authReducer,
-  sidebar: sidebarReducer,
   cart: cartReducer,
 });
 

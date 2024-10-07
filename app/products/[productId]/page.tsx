@@ -1,27 +1,27 @@
 "use client";
 
-import { FC, Suspense, useEffect, useState } from "react";
+import { FC, useState } from "react";
+import { Dot, Minus, Plus } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import ProductCarousel from "@/components/ProductCarousel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { formatPrice } from "@/helpers";
 import { addToCart } from "@/lib/features/cartSlice";
-import { Dot, Minus, Plus } from "lucide-react";
-import { useDispatch } from "react-redux";
 import { AppDispatch, useAppSelector } from "@/lib/store";
 import service from "@/appwrite/config";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Toaster, toast } from "sonner";
 import conf from "@/conf/conf";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import {
@@ -31,7 +31,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import YouMayLike from "@/components/YouMayLike";
-import { ProgressBar, useProgressBar } from "@/components/ui/progress-bar";
 
 interface PageProps {
   params: {
@@ -55,7 +54,6 @@ const Page: FC<PageProps> = ({ params }) => {
   const [quantity, setQuantity] = useState<number>(1);
   const [productImages, setProductImages] = useState<ProductImagesProps[]>([]);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const { start, done } = useProgressBar();
 
   const productQuery = useQuery({
     queryKey: ["product", { id: params.productId }],
@@ -95,9 +93,7 @@ const Page: FC<PageProps> = ({ params }) => {
             refetchType: "all",
           });
           toast.success("Added to cart!");
-          start();
           router.push("/cart");
-          done();
         }
       } else {
         if (productQuery.isSuccess) {

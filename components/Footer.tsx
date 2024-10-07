@@ -1,7 +1,8 @@
 import React from "react";
-import MaxWidthWrapper from "./MaxWidthWrapper";
-import FacebookIcon from "./icons/FacebookIcon";
-import InstagramIcon from "./icons/InstagramIcon";
+
+import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import FacebookIcon from "@/components/icons/FacebookIcon";
+import InstagramIcon from "@/components/icons/InstagramIcon";
 
 const Footer = () => {
   return (

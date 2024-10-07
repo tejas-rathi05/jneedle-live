@@ -4,9 +4,10 @@ import conf from "@/conf/conf";
 import { getRandomProducts } from "@/helpers";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import ProductCard from "./ProductCard";
-import { Skeleton } from "./ui/skeleton";
-import { Product } from "@/app/admin/products/columns";
+
+import ProductCard from "@/components/ProductCard";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Product } from "@/types";
 
 const YouMayLike = ({ productCategory }: { productCategory: string }) => {
   console.log("productCategory", productCategory);

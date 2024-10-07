@@ -1,22 +1,17 @@
 "use client";
 
-import { Search, X } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import namer from "color-namer";
-import { useGSAP } from "@gsap/react";
+import React, { useState } from "react";
 import gsap from "gsap";
-import { useRouter } from "next/navigation";
-import { Client, Databases, Query } from "appwrite";
+import { useGSAP } from "@gsap/react";
 import conf from "@/conf/conf";
-import { Input } from "./ui/input";
-import { ScrollArea } from "./ui/scroll-area";
-import { Button } from "./ui/button";
-import { Separator } from "./ui/separator";
-import ProductCard from "./ProductCard";
 import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
-import { ProgressBarLink } from "./ui/progress-bar";
 
+import { Search, X } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 const SearchInput = ({
   isOpen,
@@ -43,7 +38,7 @@ const SearchInput = ({
     enabled: query.length > 0,
   });
 
-  console.log(query.length > 0)
+  console.log(query.length > 0);
 
   useGSAP(() => {
     if (isOpen) {
@@ -99,55 +94,56 @@ const SearchInput = ({
           </button>
         </div>
 
-        {query.length > 0 && fetchSuggestionsQuery.isSuccess &&
-          fetchSuggestionsQuery.data.length > 0 ? (
-            <>
-              <div className="w-full h-full mt-5 flex justify-between items-center py-2">
-                <p className="text-xs">
-                  {fetchSuggestionsQuery?.data?.length} RESULTS
-                </p>
-                <ProgressBarLink href={`/search?q=${query}`}>
-                  <Button variant={"ghost"} className="text-xs">
-                    VIEW RESULTS
-                  </Button>
-                </ProgressBarLink>
-              </div>
-              <Separator className="mb-5" />
-              <ScrollArea className="h-[500px] w-full pb-5">
-                <div className="grid grid-cols-3 md:grid-cols-4 gap-x-10 gap-y-10">
-                  {fetchSuggestionsQuery.data.map(
-                    (suggestion: any) => (
-                      <div key={suggestion.$id} className="w-full h-full">
-                        <ProgressBarLink
-                          href={`/products/${suggestion.$id}`}
-                          className="w-full h-full"
-                        >
-                          <div className="group overflow-hidden">
-                            {suggestion.imgurl?.[0] && (
-                              <img
-                                key={suggestion.imgurl[0]["$id"]}
-                                src={suggestion.imgurl[0]["previewUrl"]}
-                                loading="lazy"
-                                alt={suggestion.name}
-                                className={`w-full h-full object-cover group-hover:scale-105 transition-all ease-in-out duration-300`}
-                              />
-                            )}
-                          </div>
-                          <div className="text-center w-full">
-                            <p className="text-sm md:text-base mt-2 group-hover:underline capitalize">
-                              {suggestion.name}
-                            </p>
-                          </div>
-                        </ProgressBarLink>
+        {query.length > 0 &&
+        fetchSuggestionsQuery.isSuccess &&
+        fetchSuggestionsQuery.data.length > 0 ? (
+          <>
+            <div className="w-full h-full mt-5 flex justify-between items-center py-2">
+              <p className="text-xs">
+                {fetchSuggestionsQuery?.data?.length} RESULTS
+              </p>
+              <Link href={`/search?q=${query}`}>
+                <Button variant={"ghost"} className="text-xs">
+                  VIEW RESULTS
+                </Button>
+              </Link>
+            </div>
+            <Separator className="mb-5" />
+            <ScrollArea className="h-[500px] w-full pb-5">
+              <div className="grid grid-cols-3 md:grid-cols-4 gap-x-10 gap-y-10">
+                {fetchSuggestionsQuery.data.map((suggestion: any) => (
+                  <div key={suggestion.$id} className="w-full h-full">
+                    <Link
+                      href={`/products/${suggestion.$id}`}
+                      className="w-full h-full"
+                    >
+                      <div className="group overflow-hidden">
+                        {suggestion.imgurl?.[0] && (
+                          <img
+                            key={suggestion.imgurl[0]["$id"]}
+                            src={suggestion.imgurl[0]["previewUrl"]}
+                            loading="lazy"
+                            alt={suggestion.name}
+                            className={`w-full h-full object-cover group-hover:scale-105 transition-all ease-in-out duration-300`}
+                          />
+                        )}
                       </div>
-                    )
-                  )}
-                </div>
-              </ScrollArea>
-            </>
-          ):(<p className="text-xs my-10">
+                      <div className="text-center w-full">
+                        <p className="text-sm md:text-base mt-2 group-hover:underline capitalize">
+                          {suggestion.name}
+                        </p>
+                      </div>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
+          </>
+        ) : (
+          <p className="text-xs my-10">
             {fetchSuggestionsQuery?.data?.length} RESULTS
-          </p>)}
+          </p>
+        )}
       </div>
     </div>
   );

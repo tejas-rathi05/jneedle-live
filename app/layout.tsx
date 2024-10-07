@@ -10,16 +10,14 @@ import type { ReactNode } from "react";
 import { StoreProvider } from "./StoreProvider";
 
 import "./globals.css";
-// import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import QueryProvider from "@/components/QueryProvider";
-import RouteLoader from "./RouteLoader";
-import { Toaster, toast } from "sonner";
-import { ProgressBar } from "@/components/ui/progress-bar";
+import { Toaster } from "sonner";
+import ProgressBarProvider from "@/components/ProgressBarProvider";
 
 export const metadata: Metadata = {
   title: "JNeedle",
@@ -49,8 +47,6 @@ interface Props {
 }
 
 export default function RootLayout({ children }: Props) {
-  const queryClient = new QueryClient();
-
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -59,18 +55,16 @@ export default function RootLayout({ children }: Props) {
           robotoSlab.className
         )}
       >
-        <ProgressBar className="fixed top-0 h-1 bg-stone-800">
+        <ProgressBarProvider>
           <QueryProvider>
             <StoreProvider>
               <Navbar />
-              {/* <RouteLoader /> */}
               {children}
               <Footer />
             </StoreProvider>
-            {/* <ReactQueryDevtools /> */}
             <Toaster richColors />
           </QueryProvider>
-        </ProgressBar>
+        </ProgressBarProvider>
       </body>
     </html>
   );

@@ -1,21 +1,17 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
+import React, { useState } from "react";
+import { TfiLayoutGrid2Alt, TfiLayoutGrid3Alt } from "react-icons/tfi";
+import {motion} from "framer-motion";
+
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import { Skeleton } from "@/components/ui/skeleton";
 import conf from "@/conf/conf";
-import { Client, Databases, Query } from "appwrite";
-import { useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { TfiLayoutGrid2Alt, TfiLayoutGrid3Alt } from "react-icons/tfi";
-import {motion} from "framer-motion";
 import ProductCard from "@/components/ProductCard";
 import { useQuery } from "@tanstack/react-query";
+import { ProductDetails } from "@/types";
 
-const client = new Client()
-  .setEndpoint(conf.appwriteUrl)
-  .setProject(conf.appwriteProjectId);
-
-const databases = new Databases(client);
 
 const fadeInAnimationVariants = {
   initial: {

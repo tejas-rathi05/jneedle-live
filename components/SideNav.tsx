@@ -1,28 +1,22 @@
 "use client";
 
+import { motion } from "framer-motion";
+import conf from "@/conf/conf";
+import { useQuery } from "@tanstack/react-query";
+import { useAppSelector } from "@/lib/store";
+import Link from "next/link";
+
+import { ChevronRight, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Sheet,
   SheetContent,
   SheetFooter,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { ChevronRight, Menu } from "lucide-react";
-import FacebookIcon from "./icons/FacebookIcon";
-import InstagramIcon from "./icons/InstagramIcon";
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { motion } from "framer-motion";
-import { useAppSelector } from "@/lib/store";
-import LogoutBtn from "./LogoutBtn";
-import conf from "@/conf/conf";
-import { current } from "@reduxjs/toolkit";
-import { useEffect, useState } from "react";
-import { sideNavLinks } from "@/helpers/links";
-import { ProgressBarLink } from "./ui/progress-bar";
-import { useQuery } from "@tanstack/react-query";
+import FacebookIcon from "@/components/icons/FacebookIcon";
+import InstagramIcon from "@/components/icons/InstagramIcon";
+import LogoutBtn from "@/components/LogoutBtn";
 
 const fadeInAnimationVariants = {
   initial: {
@@ -45,7 +39,7 @@ export function SideNav() {
   const navQuery = useQuery({
     queryKey: ["Pages"],
     queryFn: async () => {
-      const res = await fetch("/api/pages/fetch-all-pages", {
+      const res = await fetch(`${conf.baseURL}/api/pages/fetch-all-pages`, {
         method: "GET",
       });
       const data = res.json();
@@ -62,11 +56,11 @@ export function SideNav() {
       </SheetTrigger>
       <SheetContent side={"left"}>
         <div className="w-full h-full p-5 opacity-1 ">
-          <ProgressBarLink href={"/"}>
+          <Link href={"/"}>
             <p className="w-full p-2 border-b-[2px] side_tabs capitalize">
               Home
             </p>
-          </ProgressBarLink>
+          </Link>
           {navQuery.data &&
             navQuery.data.map((item: any, index: number) => {
               return (
@@ -81,7 +75,7 @@ export function SideNav() {
                     custom={index}
                     key={index}
                   >
-                    <a href={`${conf.baseURL}/collections${item.href}`}>
+                    <a href={`/collections${item.href}`}>
                       {typeof item.navLink === "string" && (
                         <p className="w-full p-2 border-b-[2px] side_tabs capitalize">
                           {item.navLink}
@@ -112,7 +106,7 @@ export function SideNav() {
           </a>
 
           {authStatus ? (
-            <a href={`${conf.baseURL}/my-account`}>
+            <a href={`/my-account`}>
               <div className="w-full p-2 mt-5 font-bold  side-tabs flex justify-between items-center cursor-pointer hover:bg-gray-100/50 rounded-xl">
                 Account <ChevronRight />
               </div>
@@ -120,7 +114,7 @@ export function SideNav() {
           ) : (
             <div className="flex justify-center items-center w-full my-10">
               <a
-                href={`${conf.baseURL}/login`}
+                href={`/login`}
                 className="w-full"
               >
                 <button className="hover:before:bg-white relative h-[50px] w-full overflow-hidden border border-stone-800 bg-stone-800 px-8 text-white shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-white before:transition-all before:duration-500 hover:text-stone-800 hover:before:left-0 hover:before:w-full">

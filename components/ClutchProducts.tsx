@@ -1,15 +1,16 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import MaxWidthWrapper from "./MaxWidthWrapper";
+import React from "react";
 import { cn } from "@/lib/utils";
-import { Button } from "./ui/button";
-import { Skeleton } from "./ui/skeleton";
-import ProductCard from "./ProductCard";
 import conf from "@/conf/conf";
+import Link from "next/link";
+
+import { Product } from "@/types";
+import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import ProductCard from "@/components/ProductCard";
 import { useQuery } from "@tanstack/react-query";
-import { Product } from "@/app/admin/products/columns";
-import { ProgressBarLink } from "./ui/progress-bar";
 
 const ClutchProducts = () => {
   const clutchProductsQuery = useQuery({
@@ -63,8 +64,8 @@ const ClutchProducts = () => {
                 PETIT <br /> POINT <br /> CLUTCH
               </p>
             </div>
-            <ProgressBarLink
-              href={`${conf.baseURL}/products?category=clutch`}
+            <Link
+              href={`/products?category=clutch`}
               className="w-full"
             >
               <button className="hover:before:bg-stone-50 relative h-[50px] w-full overflow-hidden border border-stone-800 bg-stone-800 px-8 text-white shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-stone-50 before:transition-all before:duration-500 hover:text-stone-800 hover:before:left-0 hover:before:w-full">
@@ -72,16 +73,16 @@ const ClutchProducts = () => {
                   EXPLORE CLUTCH
                 </span>
               </button>
-            </ProgressBarLink>
+            </Link>
           </div>
 
-          <ProgressBarLink href={`${conf.baseURL}/products?category=clutch`}>
+          <Link href={`/products?category=clutch`}>
             <button className="xl:hidden hover:before:bg-stone-50 relative h-[50px] w-full overflow-hidden border border-stone-800 bg-stone-800 px-8 text-white shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-stone-50 before:transition-all before:duration-500 hover:text-stone-800 hover:before:left-0 hover:before:w-full">
               <span className="relative z-10 w-full text-sm tracking-wider flex items-center justify-center">
                 EXPLORE CLUTCH
               </span>
             </button>
-          </ProgressBarLink>
+          </Link>
         </div>
       </MaxWidthWrapper>
     </section>

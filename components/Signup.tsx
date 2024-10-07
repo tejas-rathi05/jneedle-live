@@ -8,10 +8,9 @@ import { useForm } from "react-hook-form";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/lib/store";
-import { FaGoogle } from "react-icons/fa";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
-import { ProgressBarLink } from "./ui/progress-bar";
+
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 const Signup = () => {
   const router = useRouter();
@@ -102,12 +101,12 @@ const Signup = () => {
         <div className="mt-6 text-center text-sm">
           <p className="text-gray-500 dark:text-gray-400">
             Already have an account?
-            <ProgressBarLink
+            <Link
               className="font-medium text-gray-900 underline-offset-4 hover:underline dark:text-gray-500 ml-2"
               href="/login"
             >
               Log in
-            </ProgressBarLink>
+            </Link>
           </p>
         </div>
       </div>

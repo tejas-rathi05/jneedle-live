@@ -1,4 +1,4 @@
-import { Product } from "@/app/admin/products/columns";
+import { Product } from "@/types";
 
 export const formatPrice = (amount: number) => {
   return new Intl.NumberFormat("en-US", {

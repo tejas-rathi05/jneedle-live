@@ -1,9 +1,9 @@
 import React from "react";
-import MaxWidthWrapper from "./MaxWidthWrapper";
-import { Bebas_Neue, Dancing_Script, Great_Vibes } from "next/font/google";
-import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { ProgressBarLink } from "./ui/progress-bar";
+import { Bebas_Neue, Dancing_Script, Great_Vibes } from "next/font/google";
+
+import { cn } from "@/lib/utils";
+import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 
 const bebasNeue = Bebas_Neue({
   subsets: ["latin"],
@@ -24,7 +24,7 @@ const Categories = () => {
   return (
     <MaxWidthWrapper className="py-20">
       <section className="flex flex-col md:flex-row gap-10 w-full h-full">
-        <ProgressBarLink href='/collections/vintage' className="w-full h-full relative cursor-pointer group overflow-hidden">
+        <Link href='/collections/vintage' className="w-full h-full relative cursor-pointer group overflow-hidden">
             <img
               src="/images/collages/vintage.jpg"
               alt=""
@@ -42,7 +42,7 @@ const Categories = () => {
                 </p>
               </div>
             </div>
-        </ProgressBarLink>
+        </Link>
         <Link href='/' className="w-full h-full relative cursor-pointer group overflow-hidden">
             <img
               src="/images/collages/clutch.jpg"

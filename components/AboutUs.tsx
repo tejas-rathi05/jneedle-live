@@ -1,11 +1,11 @@
 import React from "react";
-import MaxWidthWrapper from "./MaxWidthWrapper";
+import Link from "next/link";
+
 import { FaTruckFast } from "react-icons/fa6";
 import { RiHandHeartFill } from "react-icons/ri";
 import { GiEcology } from "react-icons/gi";
 import { RiMedalFill } from "react-icons/ri";
-import conf from "@/conf/conf";
-import { ProgressBarLink } from "./ui/progress-bar";
+import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 
 const AboutUs = () => {
   return (
@@ -36,8 +36,8 @@ const AboutUs = () => {
                 Needle.
               </p>
               <div className="w-fit h-full py-10 hidden md:inline-block">
-                <ProgressBarLink
-                  href={`${conf.baseURL}/products?category=all`}
+                <Link
+                  href={`/products?category=all`}
                   className="w-fit"
                 >
                   <button className="hover:before:bg-white relative h-[50px] w-full overflow-hidden border border-stone-800 bg-stone-800 px-8 text-white shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-white before:transition-all before:duration-500 hover:text-stone-800 hover:before:left-0 hover:before:w-full">
@@ -45,7 +45,7 @@ const AboutUs = () => {
                       MORE ABOUT US
                     </span>
                   </button>
-                </ProgressBarLink>
+                </Link>
               </div>
             </div>
           </div>
@@ -85,8 +85,8 @@ const AboutUs = () => {
           </div>
 
           <div className="w-full h-full py-10 md:hidden flex items-center justify-center">
-            <ProgressBarLink
-              href={`${conf.baseURL}/products?category=all`}
+            <Link
+              href={`/products?category=all`}
               className="w-fit"
             >
               <button className="hover:before:bg-white relative h-[50px] w-full overflow-hidden border border-stone-800 bg-stone-800 px-8 text-white shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-white before:transition-all before:duration-500 hover:text-stone-800 hover:before:left-0 hover:before:w-full">
@@ -94,7 +94,7 @@ const AboutUs = () => {
                   MORE ABOUT US
                 </span>
               </button>
-            </ProgressBarLink>
+            </Link>
           </div>
         </div>
       </MaxWidthWrapper>

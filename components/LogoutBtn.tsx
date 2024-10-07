@@ -1,10 +1,9 @@
-import authService from "@/appwrite/auth";
-import { Button } from "./ui/button";
-import { logout } from "@/lib/features/authSlice";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/lib/store";
-import conf from "@/conf/conf";
 import { useRouter } from "next/navigation";
+
+import authService from "@/appwrite/auth";
+import { logout } from "@/lib/features/authSlice";
+import { AppDispatch } from "@/lib/store";
 
 const LogoutBtn = () => {
   const router = useRouter();

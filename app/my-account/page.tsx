@@ -1,12 +1,9 @@
 "use client";
 
-import AuthLayout from "@/components/AuthLayout";
+import React from "react";
+
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
-import { Button } from "@/components/ui/button";
 import { useAppSelector } from "@/lib/store";
-import { CirclePlus } from "lucide-react";
-import React, { useState } from "react";
-import NewAddressForm from "@/components/NewAddressForm";
 import { useQuery } from "@tanstack/react-query";
 import service from "@/appwrite/config";
 import { Skeleton } from "@/components/ui/skeleton";

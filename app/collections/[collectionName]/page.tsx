@@ -1,18 +1,17 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { TfiLayoutGrid2Alt, TfiLayoutGrid3Alt } from "react-icons/tfi";
+import { motion } from "framer-motion";
 
-import FilterComponent from "@/components/FilterComponent";
 import SortComponent from "@/components/SortComponent";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import ProductCard from "@/components/ProductCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import conf from "@/conf/conf";
 import { useQuery } from "@tanstack/react-query";
-import { motion } from "framer-motion";
-import service from "@/appwrite/config";
+import { ProductDetails } from "@/types";
 
 const VintageProductsPage = ({ params }: { params: any }) => {
   const router = useRouter();
@@ -40,7 +39,7 @@ const VintageProductsPage = ({ params }: { params: any }) => {
   const pageQuery = useQuery({
     queryKey: ["Page", params.collectionName],
     queryFn: async () => {
-      const res = await fetch("/api/pages/fetch-page-item", {
+      const res = await fetch(`${conf.baseURL}/api/pages/fetch-page-item`, {
         method: "POST",
         headers: { "Content-type": "application/json" },
         body: JSON.stringify({

@@ -1,4 +1,6 @@
 import React from "react";
+import Link from "next/link";
+
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
@@ -9,10 +11,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { CirclePlus } from "lucide-react";
-import NewAddressForm from "./NewAddressForm";
-import { ProgressBarLink } from "./ui/progress-bar";
+import NewAddressForm from "@/components/NewAddressForm";
 
 const PrimaryAddress = ({
   userAddressData,
@@ -25,11 +26,11 @@ const PrimaryAddress = ({
     <>
       <div className="flex justify-between items-center py-3 border-b ">
         <p className="tracking-wider font-semibold">MY ADDRESS</p>
-        <ProgressBarLink href="/my-account/my-address">
+        <Link href="/my-account/my-address">
           <Button variant={"ghost"} className="text-xs text-muted-foreground">
             Edit
           </Button>
-        </ProgressBarLink>
+        </Link>
       </div>
       <div className="py-6 flex flex-wrap items-center justify-center gap-2">
         {userAddressData.length>0 ? (

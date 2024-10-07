@@ -1,15 +1,15 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import MaxWidthWrapper from "./MaxWidthWrapper";
-import { cn } from "@/lib/utils";
-import { Skeleton } from "./ui/skeleton";
-import { formatPrice } from "@/helpers";
-import ProductCard from "./ProductCard";
+import React from "react";
 import conf from "@/conf/conf";
+import Link from "next/link";
+
+import { Product } from "@/types";
+import { cn } from "@/lib/utils";
+import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import { Skeleton } from "@/components/ui/skeleton";
+import ProductCard from "@/components/ProductCard";
 import { useQuery } from "@tanstack/react-query";
-import { Product } from "@/app/admin/products/columns";
-import { ProgressBarLink } from "./ui/progress-bar";
 
 const VintageProducts = () => {
   const vintageProductsQuery = useQuery({
@@ -17,15 +17,11 @@ const VintageProducts = () => {
     queryFn: async () => {
       const res = await fetch(`${conf.baseURL}/api/landing-page/vintage`);
       const data = await res.json();
+      console.log("VINTAGE: ", data)
       return data;
     },
     staleTime: 100 * 60 * 60 * 60,
   });
-
-  const getRandomProducts = (products: Product[], count: number): Product[] => {
-    const shuffled = products.sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, count);
-  };
 
   return (
     <section className={cn(`w-full h-full py-20 bg-stone-50 border-t`)}>
@@ -42,8 +38,8 @@ const VintageProducts = () => {
 
               <p className="xl:hidden text-center">PETIT POINT VINTAGE</p>
             </div>
-            <ProgressBarLink
-              href={`${conf.baseURL}/products?category=vintage`}
+            <Link
+              href={`/products?category=vintage`}
               className="w-full"
             >
               <button className="hidden xl:block hover:before:bg-stone-50 relative h-[50px] w-full overflow-hidden border border-stone-800 bg-stone-800 px-8 text-white shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-stone-50 before:transition-all before:duration-500 hover:text-stone-800 hover:before:left-0 hover:before:w-full">
@@ -51,7 +47,7 @@ const VintageProducts = () => {
                   EXPLORE VINTAGE
                 </span>
               </button>
-            </ProgressBarLink>
+            </Link>
           </div>
 
           <div className="w-full h-full grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
@@ -71,13 +67,13 @@ const VintageProducts = () => {
               )}
           </div>
 
-          <ProgressBarLink href={`${conf.baseURL}/products?category=vintage`}>
+          <Link href={`/products?category=vintage`}>
             <button className="xl:hidden hover:before:bg-stone-50 relative h-[50px] w-full overflow-hidden border border-stone-800 bg-stone-800 px-8 text-white shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-stone-50 before:transition-all before:duration-500 hover:text-stone-800 hover:before:left-0 hover:before:w-full">
               <span className="relative z-10 w-full text-sm tracking-wider flex items-center justify-center">
                 EXPLORE VINTAGE
               </span>
             </button>
-          </ProgressBarLink>
+          </Link>
         </div>
       </MaxWidthWrapper>
     </section>

@@ -1,21 +1,20 @@
 "use client";
 
-import React, { startTransition, useState } from "react";
+import Link from "next/link";
+import React, { useState } from "react";
 import { login as authLogin } from "@/lib/features/authSlice";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import authService from "@/appwrite/auth";
 import { useDispatch } from "react-redux";
+
+import { FaGoogle } from "react-icons/fa";
+import authService from "@/appwrite/auth";
 import { AppDispatch } from "@/lib/store";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
-import { FaGoogle } from "react-icons/fa";
-import { ProgressBarLink, useProgressBar } from "./ui/progress-bar";
 
 export default function LoginForm() {
   const router = useRouter();
-  const {start, done} = useProgressBar();
   const dispatch = useDispatch<AppDispatch>();
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState<string>("");
@@ -38,7 +37,6 @@ export default function LoginForm() {
   const handleGoogleLogin = async () => {
     setError("");
     try {
-      start()
       const session = await authService.googleLogin();
       console.log("Session: ", session);
       if (session) {
@@ -51,8 +49,6 @@ export default function LoginForm() {
       }
     } catch (error: any) {
       setError(error.message);
-    }finally{
-      done()
     }
   };
   return (
@@ -113,12 +109,12 @@ export default function LoginForm() {
         <div className="mt-6 text-center text-sm">
           <p className="text-gray-500 dark:text-gray-400">
             Don&apos;t have an account?
-            <ProgressBarLink
+            <Link
               className="font-medium text-gray-900 underline-offset-4 hover:underline dark:text-gray-500 ml-2"
               href="/signup"
             >
               Sign up
-            </ProgressBarLink>
+            </Link>
           </p>
         </div>
         <div className="mt-6 border-t pt-6">

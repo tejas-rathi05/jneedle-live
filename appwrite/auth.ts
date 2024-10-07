@@ -1,8 +1,6 @@
 import conf from "@/conf/conf";
 import { Client, Account, ID, OAuthProvider } from "appwrite";
 import service from "./config";
-import { cookies } from "next/headers";
-import { createAdminClient } from "./adminAuth";
 
 export class AuthService {
   client = new Client();
@@ -54,15 +52,6 @@ export class AuthService {
       const user = await this.account.get()
       console.log("SESSION: ", user)
 
-      if(user.labels[0] === "admin"){
-        const res = await fetch(`${conf.baseURL}/api/adminLogin`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        })
-      }
       return true
       
     } catch (error) {
@@ -97,13 +86,7 @@ export class AuthService {
   async logout() {
     try {
       await this.account.deleteSessions();
-      const res = await fetch(`${conf.baseURL}/api/adminLogout`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      console.log("Logout: ", res);
+
     } catch (error) {
       console.log("Appwrite service :: logout :: error: ", error);
     }
