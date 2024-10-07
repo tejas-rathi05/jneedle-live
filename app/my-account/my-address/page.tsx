@@ -18,37 +18,37 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useAppSelector } from "@/lib/store";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { AiFillEdit } from "react-icons/ai";
 import React from "react";
 import UpdateAddressForm from "@/components/UpdateAddressForm";
+import { toast } from "sonner";
+import { Spinner } from "@/components/ui/spinner";
+import UserAddress from "./components/UserAddress";
 
 const page = () => {
   const router = useRouter();
   const currentUser = useAppSelector((state) => state.auth.userData);
-  const currentUserId = currentUser.$id;
-
+  const currentUserId = currentUser.userData.$id;
 
   const userAddressQuery = useQuery({
-    queryKey: ["userAddress", currentUser?.$id],
+    queryKey: ["userAddress", currentUserId],
     queryFn: async () => {
-      return await service.getUserAddress(currentUser.$id);
+      return await service.getUserAddress(currentUserId);
     },
     staleTime: 1000 * 60 * 5,
   });
 
-  const setPrimaryAddress = async (addressId: string) => {
-    const res = await service.setPrimaryAddress(currentUserId, addressId);
-    if (res) {
-      await userAddressQuery.refetch();}
-  }
+
+
   
+
   const deleteUserAddress = async (addressId: string) => {
     const res = await service.deleteUserAddress(addressId);
     if (res) {
       await userAddressQuery.refetch();
     }
-  }
+  };
 
   console.log(userAddressQuery.data);
 
@@ -84,70 +84,7 @@ const page = () => {
             {userAddressQuery.data &&
               userAddressQuery.data.length > 0 &&
               userAddressQuery.data.map((address, index) => (
-                <div
-                key={index}
-                  className={`${
-                    address.isDefault
-                      ? "bg-stone-800 rounded-lg p-3 "
-                      : "flex flex-col items-start"
-                  }`}
-                >
-                  {address.isDefault ? (
-                    <p className="text-white pb-2 text-sm text-center ">
-                      PRIMARY ADDRESS
-                    </p>
-                  ) : (
-                    <Button variant={"ghost"} className="text-xs" onClick={() => setPrimaryAddress(address.$id)}>
-                      SET AS PRIMARY ADDRESS
-                    </Button>
-                  )}
-                  <div
-                    key={index}
-                    className="p-5 h-56 w-60 rounded-md shadow-lg bg-gray-50 border border-stone-800"
-                  >
-                    <div className="w-full h-full flex flex-col items-end justify-between">
-                      <div className="w-full h-full text-left">
-                        <p className="text-lg font-semibold">
-                          {address.firstName} {address.lastName}
-                        </p>
-                        <div className="truncate">
-                          <p className="text-sm">{address.phone}</p>
-                          <p className="text-sm">{address.address1}</p>
-                          <p className="text-sm">{address.address2}</p>
-                          <p className="text-sm">
-                            {address.city}, {address.state} - {address.pincode}
-                          </p>
-                        </div>
-                        <p className="text-sm">{address.country}</p>
-                      </div>
-                      <div className="w-full h-full flex items-center justify-end gap-3">
-                          <Dialog>
-                            <DialogTrigger className="p-3">
-                                <AiFillEdit size={18} />
-                            </DialogTrigger>
-                            <DialogContent className="px-0">
-                              <DialogHeader>
-                                <DialogTitle className="text-2xl tracking-wider my-5 text-center">
-                                  UPDATE ADDRESS
-                                </DialogTitle>
-                                <DialogDescription className="text-center">
-                                  Please update your:
-                                </DialogDescription>
-                              </DialogHeader>
-                              <UpdateAddressForm formData = {address} currentUserId={currentUserId} />
-                            </DialogContent>
-                          </Dialog>
-                        <button
-                          type="button"
-                          className="hover:bg-gray-100 rounded-xl p-3"
-                          onClick={() => deleteUserAddress(address.$id)}
-                        >
-                          <FaTrashAlt size={18} className="text-red-800" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <UserAddress address= {address} index={index} userId={currentUserId}/>
               ))}
 
             {!userAddressQuery.data && !userAddressQuery.isLoading && (

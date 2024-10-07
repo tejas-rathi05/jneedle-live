@@ -113,6 +113,7 @@ const Navbar = () => {
                 return (
                   <a
                     href={`/collections${item.href}`}
+                    key={item.$id}
                   >
                     <div className="relative p-2 cursor-pointer hover:font-bold transition-all ease-in-out duration-150">
                       {typeof item.navLink === "string" && (

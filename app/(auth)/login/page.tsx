@@ -20,6 +20,8 @@ const page = () => {
   const dispatch = useDispatch<AppDispatch>();
   const authStatus = useAppSelector((state) => state.auth.status);
 
+  console.log("AUTH STATUS: ", authStatus)
+
   useEffect(() => {
     authService
       .getCurrentUser()

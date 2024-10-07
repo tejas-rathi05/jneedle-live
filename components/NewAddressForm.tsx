@@ -21,9 +21,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-
-
-
+import { Spinner } from "./ui/spinner";
 
 const NewAddressForm = ({ currentUserId }: { currentUserId: string }) => {
   const queryClient = useQueryClient();
@@ -64,7 +62,7 @@ const NewAddressForm = ({ currentUserId }: { currentUserId: string }) => {
         console.log(res);
         if (res) {
           await queryClient.invalidateQueries({
-            queryKey: ["userAddress"],
+            queryKey: ["userAddress", currentUserId],
             refetchType: "all",
           });
         }
@@ -74,7 +72,7 @@ const NewAddressForm = ({ currentUserId }: { currentUserId: string }) => {
       }
     },
     onSuccess: () => {
-      toast.success("Product added successfully!");
+      toast.success("Address added successfully!");
 
       console.log("DONE");
       form.reset();
@@ -240,7 +238,11 @@ const NewAddressForm = ({ currentUserId }: { currentUserId: string }) => {
               type="submit"
             >
               <span className="relative w-full text-xs tracking-widest flex items-center justify-center">
-                ADD A NEW ADDRESS
+                {createAddressMutation.isPending ? (
+                  <Spinner />
+                ) : (
+                  <p>ADD A NEW ADDRESS</p>
+                )}
               </span>
             </Button>
           </div>

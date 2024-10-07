@@ -69,6 +69,7 @@ export class AuthService {
       console.log("Google Login: ", res);
       return res;
     } catch (error) {
+      console.log(error)
       throw error;
     }
   }
@@ -76,6 +77,7 @@ export class AuthService {
   async getCurrentUser() {
     try {
       return await this.account.get();
+      // console.log("USER: ", user)
     } catch (error) {
       console.log("Appwrite service :: getCurrentUser :: error: ", error);
     }

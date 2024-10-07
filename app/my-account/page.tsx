@@ -13,11 +13,13 @@ import MyOrders from "@/components/MyOrders";
 const Page = () => {
   const currentUser = useAppSelector((state) => state.auth.userData);
 
+  console.log("current user: ", currentUser.userData.$id)
+
   const userAddressQuery = useQuery({
-    queryKey: ["userAddress", currentUser?.$id],
+    queryKey: ["userAddress", currentUser?.userData?.$id],
     queryFn: async () => {
       if (!currentUser) return null;
-      return await service.getUserAddress(currentUser.$id);
+      return await service.getUserAddress(currentUser.userData.$id);
     },
     enabled: !!currentUser,
   });
@@ -53,9 +55,10 @@ const Page = () => {
                 {userAddressQuery.data && (
                   <PrimaryAddress
                     userAddressData={userAddressQuery.data}
-                    currentUserId={currentUser.$id}
+                    currentUserId={currentUser.userData.$id}
                   />
                 )}
+                
               </div>
             </div>
           </div>

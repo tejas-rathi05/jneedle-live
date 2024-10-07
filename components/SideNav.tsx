@@ -64,7 +64,6 @@ export function SideNav() {
           {navQuery.data &&
             navQuery.data.map((item: any, index: number) => {
               return (
-                <>
                   <motion.div
                     variants={fadeInAnimationVariants}
                     initial="initial"
@@ -73,7 +72,7 @@ export function SideNav() {
                       once: true,
                     }}
                     custom={index}
-                    key={index}
+                    key={item.$id}
                   >
                     <a href={`/collections${item.href}`}>
                       {typeof item.navLink === "string" && (
@@ -84,7 +83,7 @@ export function SideNav() {
 
                       {Array.isArray(item.navLink) &&
                         item.navLink[0]?.previewUrl && (
-                          <button className="w-full py-2 border-b-[2px] side_tabs">
+                          <button className="w-full py-2 border-b-[2px] side_tabs" key={item.$id}>
                             <img
                               src={item.navLink[0].previewUrl}
                               alt=""
@@ -95,7 +94,6 @@ export function SideNav() {
                         )}
                     </a>
                   </motion.div>
-                </>
               );
             })}
 
