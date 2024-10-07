@@ -111,7 +111,7 @@ const Navbar = () => {
               navQuery.data.map((item: any, index: number) => {
                 console.log(item);
                 return (
-                  <Link
+                  <a
                     href={`/collections${item.href}`}
                   >
                     <div className="relative p-2 cursor-pointer hover:font-bold transition-all ease-in-out duration-150">
@@ -133,7 +133,7 @@ const Navbar = () => {
                           </button>
                         )}
                     </div>
-                  </Link>
+                  </a>
                 );
               })}
             

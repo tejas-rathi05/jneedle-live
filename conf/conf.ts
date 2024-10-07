@@ -25,7 +25,6 @@ const conf = {
     process.env.NEXT_PUBLIC_APPWRITE_USER_ADDRESS_ID
   ),
   baseURL: String(process.env.NEXT_PUBLIC_BASE_URL),
-  appwriteAdminKey: String(process.env.NEXT_PUBLIC_APPWRITE_API_KEY),
 };
 
 export default conf;
