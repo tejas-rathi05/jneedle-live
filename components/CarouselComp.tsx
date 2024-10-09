@@ -36,10 +36,11 @@ const CarouselComp: React.FC = () => {
   console.log(responsiveImage);
 
   // Define your images for sm and lg sizes
-  const imagesLG = [`/images/xl_carousel/9.png`, `/images/xl_carousel/1.png`];
+  const imagesLG = [`/images/xl_carousel/9.png`, `/images/xl_carousel/1.png`, `/images/xl_carousel/10.jpg`];
   const imagesSM = [
     `/images/xl_carousel/9-sm.png`,
     `/images/xl_carousel/1-sm.png`,
+    `/images/xl_carousel/10-sm.jpg`,
   ];
 
   return (

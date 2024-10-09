@@ -55,6 +55,8 @@ const Navbar = () => {
       const data = res.json();
       return data;
     },
+    staleTime: 1000 * 60 * 60,
+
   });
 
   console.log("Pages: ", navQuery.data);

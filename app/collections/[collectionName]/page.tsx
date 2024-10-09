@@ -13,7 +13,7 @@ import conf from "@/conf/conf";
 import { useQuery } from "@tanstack/react-query";
 import { ProductDetails } from "@/types";
 
-const VintageProductsPage = ({ params }: { params: any }) => {
+const ProductsPage = ({ params }: { params: any }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -51,10 +51,9 @@ const VintageProductsPage = ({ params }: { params: any }) => {
     },
   });
 
-  console.log("???", pageQuery.data);
 
   const productsQuery = useQuery({
-    queryKey: ["products", "vintage", sort],
+    queryKey: ["products", params.collectionName, sort],
     queryFn: async () => {
       const res = await fetch(
         `${conf.baseURL}/api/products?category=${params.collectionName}&sort=${
@@ -67,7 +66,6 @@ const VintageProductsPage = ({ params }: { params: any }) => {
     staleTime: 1000 * 60 * 60,
   });
 
-  console.log("Product:  ", productsQuery.data);
 
   const handleFilterChange = (filters: Record<string, string>) => {
     const newSearchParams = new URLSearchParams(searchParams);
@@ -192,4 +190,4 @@ const VintageProductsPage = ({ params }: { params: any }) => {
   );
 };
 
-export default VintageProductsPage;
+export default ProductsPage;

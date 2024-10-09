@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import service from "@/appwrite/config";
 
 
-export const revalidate = 0;
+// export const revalidate = 0;
 
 export async function GET(req: NextRequest) {
   const res = await service.getAllPages();

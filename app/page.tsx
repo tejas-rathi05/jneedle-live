@@ -6,6 +6,7 @@ import AboutUs from "@/components/AboutUs";
 import ReviewMarquee from "@/components/ReviewsMarqee";
 import CarouselComp from "@/components/CarouselComp";
 import Features from "../components/Features";
+import { CollectionCarousel } from "@/components/CollectionCarousel";
 
 export default function IndexPage() {
   
@@ -14,7 +15,8 @@ export default function IndexPage() {
         <CarouselComp />
         <Features />
         <BestSellers/>
-        <Categories />
+        {/* <Categories /> */}
+        <CollectionCarousel/>
         <VintageProducts />
         <ClutchProducts />
         <ReviewMarquee />
