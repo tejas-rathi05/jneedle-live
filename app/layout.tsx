@@ -7,7 +7,6 @@ import {
   Roboto_Slab,
 } from "next/font/google";
 import type { ReactNode } from "react";
-import { StoreProvider } from "./StoreProvider";
 
 import "./globals.css";
 import Footer from "@/components/Footer";
@@ -73,11 +72,9 @@ export default function RootLayout({ children }: Props) {
       >
         <ProgressBarProvider>
           <QueryProvider>
-            <StoreProvider>
               <Navbar />
               {children}
               <Footer />
-            </StoreProvider>
             <Toaster richColors />
           </QueryProvider>
         </ProgressBarProvider>

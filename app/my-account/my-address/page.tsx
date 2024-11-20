@@ -17,19 +17,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useAppSelector } from "@/lib/store";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { AiFillEdit } from "react-icons/ai";
 import React from "react";
-import UpdateAddressForm from "@/components/UpdateAddressForm";
-import { toast } from "sonner";
-import { Spinner } from "@/components/ui/spinner";
 import UserAddress from "./components/UserAddress";
+import { useAuthStore } from "@/lib/store/auth-store";
 
 const page = () => {
   const router = useRouter();
-  const currentUser = useAppSelector((state) => state.auth.userData);
-  const currentUserId = currentUser.userData.$id;
+  const { user } = useAuthStore()
+  const currentUserId = user.$id;
 
   const userAddressQuery = useQuery({
     queryKey: ["userAddress", currentUserId],

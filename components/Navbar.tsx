@@ -18,17 +18,18 @@ import {
 import SearchInput from "@/components/SearchInput";
 import { Button } from "@/components/ui/button";
 import UserProfileBtn from "@/components/UserProfileBtn";
-import { useAppSelector } from "@/lib/store";
 import { useQuery } from "@tanstack/react-query";
 import { SideNav } from "@/components/SideNav";
 import { UserCartItem } from "@/types";
+import { useAuthStore } from "@/lib/store/auth-store";
+import { useCartStore } from "@/lib/store/cart-store";
 
 const Navbar = () => {
-  const authStatus = useAppSelector((state) => state.auth.status);
+  const { authStatus, user } = useAuthStore()
+  const { items } = useCartStore()
+
   const [toShowSearch, setToShowSearch] = useState(false);
   const [cartItems, setCartItems] = useState<UserCartItem[] | []>([]);
-  const userData = useAppSelector((state) => state.auth.userData);
-  const localCartItems = useAppSelector((state) => state.cart.items);
 
   const toggleSearch = () => {
     setToShowSearch(!toShowSearch);
@@ -62,9 +63,9 @@ const Navbar = () => {
   console.log("Pages: ", navQuery.data);
 
   const cartQuery = useQuery({
-    queryKey: ["cartItems", userData?.userData?.$id ?? userData?.$id],
+    queryKey: ["cartItems", user?.$id],
     queryFn: async () => {
-      const userId = userData?.userData?.$id ?? userData?.$id;
+      const userId = user.$id;
       const cartData = await service.getCartItems(userId);
       if (cartData) {
         const transformedCartData = transformCartData(cartData);
@@ -82,9 +83,9 @@ const Navbar = () => {
         setCartItems(cartQuery.data);
       }
     } else {
-      setCartItems(localCartItems as UserCartItem[]);
+      setCartItems(items as UserCartItem[]);
     }
-  }, [authStatus, cartQuery.data, localCartItems]);
+  }, [authStatus, cartQuery.data, items]);
 
   return (
     <nav>
@@ -202,8 +203,8 @@ const Navbar = () => {
               </div>
             ) : (
               <Link href="/login">
-                <Button variant="gooeyLeft" className="ml-3 max-sm:hidden">
-                  Log In
+                <Button variant="custom" className="ml-3 max-sm:hidden rounded-none">
+                  <p className="relative">Log In</p>
                 </Button>
               </Link>
             )}

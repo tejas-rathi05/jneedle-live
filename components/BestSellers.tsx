@@ -9,6 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import ProductCard from "@/components/ProductCard";
 import { useQuery } from "@tanstack/react-query";
 import { Product } from "@/types";
+import { Button } from "./ui/button";
 
 const BestSellers = () => {
   const featuredProductsQuery = useQuery({
@@ -48,11 +49,11 @@ const BestSellers = () => {
         </div>
         <div className="flex justify-center items-center w-full my-10">
           <Link href={`/products?category=all`}>
-            <button className="hover:before:bg-white relative h-[50px] w-full overflow-hidden border border-stone-800 bg-stone-800 px-8 text-white shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-white before:transition-all before:duration-500 hover:text-stone-800 hover:before:left-0 hover:before:w-full">
+            <Button variant={'custom'}>
               <span className="relative z-10 w-full text-sm tracking-widest flex items-center justify-center">
                 SHOP ALL PRODUCTS
               </span>
-            </button>
+            </Button>
           </Link>
         </div>
       </section>

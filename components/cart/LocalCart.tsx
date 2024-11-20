@@ -4,7 +4,6 @@ import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { useDispatch } from "react-redux";
 import { FaTrashAlt } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,31 +14,30 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { updateQuantity, removeFromCart } from "@/lib/features/cartSlice";
-import { AppDispatch, useAppSelector } from "@/lib/store";
 import { Minus, Plus, ShoppingBag } from "lucide-react";
 import { formatPrice } from "@/helpers";
+import { useAuthStore } from "@/lib/store/auth-store";
+import { useCartStore } from "@/lib/store/cart-store";
 
 const LocalCart = () => {
   const router = useRouter();
-  const dispatch = useDispatch<AppDispatch>();
-  const cartItems = useAppSelector((state) => state.cart.items);
-  const authStatus = useAppSelector((state) => state.auth.status);
+  const { authStatus } = useAuthStore();
+  const { items, updateQuantity, removeFromCart } = useCartStore();
 
   const handleDecreaseQuantity = (itemId: string, currentQuantity: number) => {
     if (currentQuantity > 1) {
-      dispatch(updateQuantity({ id: itemId, quantity: currentQuantity - 1 }));
-    }else{
-      dispatch(removeFromCart(itemId));
+      updateQuantity(itemId, currentQuantity - 1);
+    } else {
+      removeFromCart(itemId);
     }
   };
 
   const handleIncreaseQuantity = (itemId: string, currentQuantity: number) => {
-    dispatch(updateQuantity({ id: itemId, quantity: currentQuantity + 1 }));
+    updateQuantity(itemId, currentQuantity + 1);
   };
 
   const handleRemoveFromCart = (itemId: string) => {
-    dispatch(removeFromCart(itemId));
+    removeFromCart(itemId);
   };
   const handleCheckout = () => {
     if (!authStatus) {
@@ -51,7 +49,7 @@ const LocalCart = () => {
   };
 
   const calculateTotal = () => {
-    return cartItems.reduce(
+    return items.reduce(
       (total, item) => total + item.price * item.quantity,
       0
     );
@@ -62,7 +60,7 @@ const LocalCart = () => {
   return (
     <>
       <div className="w-full h-full flex items-center justify-center max-w-4xl">
-        {cartItems.length > 0 ? (
+        {items.length > 0 ? (
           <div className="w-full h-full">
             <h1 className="py-10 text-3xl text-gray-600">YOUR SHOPPING BAG</h1>
             <Table className="">
@@ -75,7 +73,7 @@ const LocalCart = () => {
                 </TableRow>
               </TableHeader>
               <TableBody className="border-b">
-                {cartItems.map((item) => (
+                {items.map((item) => (
                   <TableRow key={item.id} className="border-none">
                     <TableCell className="font-medium">
                       <Link href={`/products/${item.id}`}>
@@ -101,7 +99,7 @@ const LocalCart = () => {
                         </Button>
                         <div className="w-full h-12 flex justify-center items-center text-center">
                           <input
-                            type="number"
+                            type="string"
                             value={item.quantity}
                             readOnly
                             className="w-full h-full bg-transparent text-center text-sm border-none"
@@ -142,14 +140,14 @@ const LocalCart = () => {
                 Shipping & taxes calculated at checkout
               </p>
               <div className="w-fit">
-                <button
-                  className="hover:before:bg-white relative h-[50px] w-full overflow-hidden border border-stone-800 bg-stone-800 px-8 text-white shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-white before:transition-all before:duration-500 hover:text-stone-800 hover:before:left-0 hover:before:w-full"
+                <Button variant={'custom'}
+                className="px-8 py-4 rounded-none"
                   onClick={handleCheckout}
                 >
                   <span className="relative z-10 w-full text-sm tracking-widest flex items-center justify-center">
                     CHECKOUT
                   </span>
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -161,11 +159,11 @@ const LocalCart = () => {
             </div>
             <Link href="/products">
               <div className="w-fit py-10">
-                <button className="hover:before:bg-white relative h-[50px] w-full overflow-hidden border border-stone-800 bg-stone-800 px-8 text-white shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-white before:transition-all before:duration-500 hover:text-stone-800 hover:before:left-0 hover:before:w-full">
+                <Button variant={'custom'} className="rounded-none">
                   <span className="relative z-10 w-full text-sm tracking-widest flex items-center justify-center">
                     SHOP OUR PRODUCTS
                   </span>
-                </button>
+                </Button>
               </div>
             </Link>
           </div>

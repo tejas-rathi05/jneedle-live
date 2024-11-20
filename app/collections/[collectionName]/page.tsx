@@ -96,7 +96,7 @@ const ProductsPage = ({ params }: { params: any }) => {
   // console.log("Products", products);
 
   return (
-    <section>
+    <section className="mb-20">
       {pageQuery.isSuccess &&
         pageQuery.data &&
         pageQuery.data.pageHeading !== null &&

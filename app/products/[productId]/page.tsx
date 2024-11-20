@@ -2,7 +2,6 @@
 
 import { FC, useState } from "react";
 import { Dot, Minus, Plus } from "lucide-react";
-import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -11,8 +10,6 @@ import ProductCarousel from "@/components/ProductCarousel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { formatPrice } from "@/helpers";
-import { addToCart } from "@/lib/features/cartSlice";
-import { AppDispatch, useAppSelector } from "@/lib/store";
 import service from "@/appwrite/config";
 import { Skeleton } from "@/components/ui/skeleton";
 import conf from "@/conf/conf";
@@ -32,6 +29,8 @@ import {
 } from "@/components/ui/accordion";
 import YouMayLike from "@/components/YouMayLike";
 import { Spinner } from "@/components/ui/spinner";
+import { useCartStore } from "@/lib/store/cart-store";
+import { useAuthStore } from "@/lib/store/auth-store";
 
 interface PageProps {
   params: {
@@ -47,11 +46,9 @@ interface ProductImagesProps {
 
 const Page: FC<PageProps> = ({ params }) => {
   const queryClient = useQueryClient();
-  const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
-  const authStatus = useAppSelector((state) => state.auth.status);
-  const userData = useAppSelector((state) => state.auth.userData);
-  const cartItems = useAppSelector((state) => state.cart.items);
+  const { authStatus, user } = useAuthStore()
+  const { addToCart } = useCartStore()
   const [quantity, setQuantity] = useState<number>(1);
   const [productImages, setProductImages] = useState<ProductImagesProps[]>([]);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -85,8 +82,8 @@ const Page: FC<PageProps> = ({ params }) => {
   const createCartMutation = useMutation({
     mutationFn: async () => {
       try {
-        if (authStatus && userData) {
-          const userId = userData?.userData?.$id ?? userData?.$id;
+        if (authStatus && user) {
+          const userId = user?.$id;
 
           if (productQuery.isSuccess) {
             const payload = {
@@ -97,7 +94,7 @@ const Page: FC<PageProps> = ({ params }) => {
             };
             await service.addCartItem(payload);
             await queryClient.invalidateQueries({
-              queryKey: ["cartItems", userData?.userData?.$id ?? userData?.$id],
+              queryKey: ["cartItems", user?.$id],
               refetchType: "all",
             });
             toast.success("Added to cart!");
@@ -112,7 +109,7 @@ const Page: FC<PageProps> = ({ params }) => {
               quantity,
               imgurl: productQuery.data.imgurl,
             };
-            dispatch(addToCart(cartItem));
+            addToCart(cartItem);
           }
         }
       } catch (error) {
@@ -220,9 +217,10 @@ const Page: FC<PageProps> = ({ params }) => {
               </div>
 
               <div className="w-full h-full my-10">
-                <button
+                <Button
                   disabled={createCartMutation.isPending}
-                  className="hover:before:bg-white relative h-[50px] w-full overflow-hidden border border-stone-800 bg-stone-800 px-3 text-white shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-white before:transition-all before:duration-500 hover:text-stone-800 hover:before:left-0 hover:before:w-full group"
+                  variant={'custom'}
+                  className="rounded-none h-14"
                   onClick={() => createCartMutation.mutate()}
                 >
                   <span className="relative w-full text-sm tracking-widest flex items-center justify-center">
@@ -237,7 +235,7 @@ const Page: FC<PageProps> = ({ params }) => {
                       />
                     )}
                   </span>
-                </button>
+                </Button>
               </div>
 
               <div className="text-sm text-gray-700 mb-10">

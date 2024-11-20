@@ -3,19 +3,16 @@
 import React, { useState } from "react";
 import authService from "@/appwrite/auth";
 import { useRouter } from "next/navigation";
-import { login } from "@/lib/features/authSlice";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/lib/store";
 
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Button } from "./ui/button";
 
 const Signup = () => {
   const router = useRouter();
   const [error, setError] = useState<string>("");
-  const dispatch = useDispatch<AppDispatch>();
   const { register, handleSubmit } = useForm();
 
   const signup = async (data: any) => {
@@ -23,8 +20,6 @@ const Signup = () => {
     try {
       const userData = await authService.createAccount(data);
       if (userData) {
-        const userData = await authService.getCurrentUser();
-        if (userData) dispatch(login(userData));
         router.push("/");
       }
     } catch (error: any) {
@@ -89,12 +84,13 @@ const Signup = () => {
               />
             </div>
 
-            <button
+            <Button
+              variant={"custom"}
+              className="h-12 rounded-none"
               type="submit"
-              className="relative flex justify-center items-center  h-12 w-full mx-auto text-center font-geist tracking-tighter  overflow-hidden rounded bg-neutral-950 px-5 py-2.5 text-white transition-all duration-300 hover:bg-neutral-800 hover:ring-2 hover:ring-neutral-800 hover:ring-offset-2"
             >
-              Sign up
-            </button>
+              <p className="relative">Sign up</p>
+            </Button>
           </div>
         </form>
 

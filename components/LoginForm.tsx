@@ -2,33 +2,27 @@
 
 import Link from "next/link";
 import React, { useState } from "react";
-import { login as authLogin } from "@/lib/features/authSlice";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
 
 import { FaGoogle } from "react-icons/fa";
 import authService from "@/appwrite/auth";
-import { AppDispatch } from "@/lib/store";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { useAuthStore } from "@/lib/store/auth-store";
+import { Button } from "./ui/button";
 
 export default function LoginForm() {
   const router = useRouter();
-  const dispatch = useDispatch<AppDispatch>();
+  const { setUser } = useAuthStore();
+
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState<string>("");
 
   const login = async (data: any) => {
     setError("");
     try {
-      const session = await authService.login(data);
-      if (session) {
-        const userData = await authService.getCurrentUser();
-        if (userData) dispatch(authLogin(userData));
-          router.replace("/");
-
-      }
+      await authService.login(data);
     } catch (error: any) {
       setError(error.message);
     }
@@ -38,12 +32,10 @@ export default function LoginForm() {
     setError("");
     try {
       const session = await authService.googleLogin();
-      console.log("Session: ", session);
       if (session) {
         const userData = await authService.getCurrentUser();
-        console.log("User Data: ", userData);
         if (userData) {
-          dispatch(authLogin(userData));
+          setUser(userData);
           router.push("/products");
         }
       }
@@ -51,6 +43,7 @@ export default function LoginForm() {
       setError(error.message);
     }
   };
+
   return (
     <div className="flex py-16 relative items-center justify-center px-4 ">
       {/* <div className="absolute top-0 z-[-1] h-screen w-screen bg-white bg-[radial-gradient(100%_50%_at_50%_0%,rgba(91,79,73,0.13)_0,rgba(91,79,73,0)_50%,rgba(91,79,73,0)_100%)]"></div> */}
@@ -97,12 +90,13 @@ export default function LoginForm() {
               />
             </div>
 
-            <button
-              type="submit"
-              className="relative flex justify-center items-center  h-12 w-full mx-auto text-center font-geist tracking-tighter overflow-hidden rounded bg-stone-800 px-5 py-2.5 text-white transition-all duration-300 hover:bg-neutral-800 hover:ring-2 hover:ring-neutral-800 hover:ring-offset-2"
+            <Button
+              variant={"custom"}
+              className="h-12 rounded-none"
+              type={"submit"}
             >
-              Sign in
-            </button>
+              <p className="relative">Sign in</p>
+            </Button>
           </div>
         </form>
 
@@ -119,13 +113,16 @@ export default function LoginForm() {
         </div>
         <div className="mt-6 border-t pt-6">
           <div className="flex items-center justify-center gap-4">
-            <button
-              className="relative flex justify-center items-center  h-12 w-full mx-auto text-center font-geist tracking-tighter  overflow-hidden rounded bg-stone-800 px-5 py-2.5 text-white transition-all duration-300 hover:bg-neutral-800 hover:ring-2 hover:ring-neutral-800 hover:ring-offset-2"
+            <Button
+              variant={"custom"}
+              className="h-12 rounded-none"
               onClick={handleGoogleLogin}
             >
-              <FaGoogle className="text-white mr-2 h-4 w-4" />
-              Sign in with Google
-            </button>
+              <div className="relative flex justify-center items-center">
+                <FaGoogle className="mr-2 h-4 w-4" />
+                <p>Sign in with Google</p>
+              </div>
+            </Button>
           </div>
         </div>
       </div>

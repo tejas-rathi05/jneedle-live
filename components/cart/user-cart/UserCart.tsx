@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import React, { useState } from "react";
-import { useAppSelector } from "@/lib/store";
 import { useRouter } from "next/navigation";
 
 import { formatPrice } from "@/helpers";
@@ -22,17 +21,17 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
 import { UserCartItem } from "@/types";
 import CartItem from "./CartItem";
+import { useAuthStore } from "@/lib/store/auth-store";
 
 const UserCart = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const userData = useAppSelector((state) => state.auth.userData);
-  const authStatus = useAppSelector((state) => state.auth.status); // Assuming you have this in your state
+  const { authStatus, user } = useAuthStore()
 
   const cartQuery = useQuery({
-    queryKey: ["cartItems", userData?.userData?.$id ?? userData?.$id],
+    queryKey: ["cartItems", user.$id],
     queryFn: async () => {
-      const userId = userData?.userData?.$id ?? userData?.$id;
+      const userId = user.$id;
       console.log("userId: ", userId);
       const cartData = await service.getCartItems(userId);
       console.log("cartData: ", cartData);
@@ -113,7 +112,7 @@ const UserCart = () => {
                     <CartItem
                       item={item}
                       imgUrl={imgUrl}
-                      userData={userData}
+                      userData={user}
                       index={index}
                     />
                   );
@@ -129,14 +128,15 @@ const UserCart = () => {
                 Shipping & taxes calculated at checkout
               </p>
               <div className="w-fit">
-                <button
-                  className="hover:before:bg-white relative h-[50px] w-full overflow-hidden border border-stone-800 bg-stone-800 px-8 text-white shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-white before:transition-all before:duration-500 hover:text-stone-800 hover:before:left-0 hover:before:w-full"
+                <Button
+                  variant={'custom'}
+                  className="rounded-none"
                   onClick={handleCheckout}
                 >
                   <span className="relative z-10 w-full text-sm tracking-widest flex items-center justify-center">
                     CHECKOUT
                   </span>
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -150,11 +150,11 @@ const UserCart = () => {
             <div className="flex w-full justify-center items-center">
               <Link href="/products">
                 <div className="py-10">
-                  <button className="hover:before:bg-white relative h-[50px] w-full overflow-hidden border border-stone-800 bg-stone-800 px-8 text-white shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-white before:transition-all before:duration-500 hover:text-stone-800 hover:before:left-0 hover:before:w-full">
+                  <Button variant={'custom'} className="rounded-none">
                     <span className="relative z-10 w-full text-sm tracking-widest flex items-center justify-center">
                       SHOP OUR PRODUCTS
                     </span>
-                  </button>
+                  </Button>
                 </div>
               </Link>
             </div>

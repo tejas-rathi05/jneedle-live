@@ -120,7 +120,7 @@ const CartItem = ({
           </Button>
           <div className="w-full h-12 flex justify-center items-center text-right">
             <input
-              type="number"
+              type="string"
               value={item.quantity}
               readOnly
               className="w-full h-full bg-transparent text-center text-sm border-none"

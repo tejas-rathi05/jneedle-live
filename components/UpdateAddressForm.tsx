@@ -239,10 +239,7 @@ const UpdateAddressForm = ({
             </div>
           </ScrollArea>
           <div className="px-10">
-            <Button
-              className="hover:before:bg-white relative h-[50px] w-full rounded-md overflow-hidden border border-stone-800 bg-stone-800 px-3 text-white shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-white before:transition-all before:duration-500 hover:text-stone-800 hover:before:left-0 hover:before:w-full"
-              type="submit"
-            >
+            <Button variant={"custom"} className="rounded-none">
               <span className="relative w-full text-xs tracking-widest flex items-center justify-center">
                 UPDATE ADDRESS
                 {createAddressMutation.isPending && (

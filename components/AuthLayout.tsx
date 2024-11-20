@@ -1,8 +1,8 @@
 "use client";
 
+import { useAuthStore } from "@/lib/store/auth-store";
 import { useRouter } from "next/navigation";
 import React, { ReactNode, useEffect, useState } from "react";
-import { useAppSelector } from "@/lib/store";
 
 const AuthLayout = ({
   children,
@@ -13,7 +13,7 @@ const AuthLayout = ({
 }) => {
   const router = useRouter();
   const [loader, setLoader] = useState(true);
-  const authStatus = useAppSelector((state) => state.auth.status);
+  const { authStatus } = useAuthStore()
 
   useEffect(() => {
     // TODO: Make it more easy to understand
@@ -28,7 +28,7 @@ const AuthLayout = ({
     setLoader(false);
   }, [authStatus, router, authentication]);
 
-  return loader ? <h1>Loading...</h1> : <>{children}</>;
+  return loader ? <h1 className="h-screen flex items-center justify-center">Loading...</h1> : <>{children}</>;
 };
 
 export default AuthLayout;

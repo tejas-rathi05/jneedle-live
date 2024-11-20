@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FaCircleCheck } from "react-icons/fa6";
@@ -9,33 +8,28 @@ import { FaCircleCheck } from "react-icons/fa6";
 import authService from "@/appwrite/auth";
 import AuthLayout from "@/components/AuthLayout";
 import LoginForm from "@/components/LoginForm";
-import { login, logout } from "@/lib/features/authSlice";
-import { AppDispatch, useAppSelector } from "@/lib/store";
-import conf from "@/conf/conf";
+import { useAuthStore } from "@/lib/store/auth-store";
+import { Button } from "@/components/ui/button";
 
 
 const page = () => {
   const router = useRouter()
   const [loading, setLoading] = useState(true);
-  const dispatch = useDispatch<AppDispatch>();
-  const authStatus = useAppSelector((state) => state.auth.status);
-
-  console.log("AUTH STATUS: ", authStatus)
+  const {authStatus, setUser, logout} = useAuthStore()
 
   useEffect(() => {
     authService
       .getCurrentUser()
       .then((userData) => {
         if (userData) {
-          dispatch(login({ userData }));
+          console.log("userdata: ", userData)
+          setUser(userData);
         } else {
-          dispatch(logout());
+          logout();
           router.push("/login");
         }
       })
       .finally(() => setLoading(false));
-
-    // console.log(service.getCartItems(currentUser.userData.$id))
   }, []);
 
   return (
@@ -51,11 +45,11 @@ const page = () => {
 
           <div className="w-fit my-20">
             <Link href={`/products?category=all`}>
-              <button className="hover:before:bg-white relative h-[50px] w-full overflow-hidden border border-stone-800 bg-stone-800 px-8 text-white shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-white before:transition-all before:duration-500 hover:text-stone-800 hover:before:left-0 hover:before:w-full">
+              <Button variant={'custom'}>
                 <span className="relative z-10 w-full text-sm tracking-widest flex items-center justify-center">
                   SHOP ALL PRODUCTS
                 </span>
-              </button>
+              </Button>
             </Link>
           </div>
         </div>

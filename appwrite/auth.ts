@@ -1,6 +1,7 @@
 import conf from "@/conf/conf";
 import { Client, Account, ID, OAuthProvider } from "appwrite";
 import service from "./config";
+import { useAuthStore } from "@/lib/store/auth-store";
 
 export class AuthService {
   client = new Client();
@@ -41,21 +42,27 @@ export class AuthService {
         return userAccount;
       }
     } catch (error) {
-      throw error;
+      console.error("Creating Account Failed:", error);
+      throw new Error("Creating Account failed.");
     }
   }
 
   async login({ email, password }: { email: string; password: string }) {
     try {
-      const session = await this.account.createEmailPasswordSession(email, password);
+      const session = await this.account.createEmailPasswordSession(
+        email,
+        password
+      );
+      const user = await this.account.get();
 
-      const user = await this.account.get()
-      console.log("SESSION: ", user)
+      // Update Zustand store with user data
+      const setUser = useAuthStore.getState().setUser;  // Access setUser from Zustand store
+      setUser(user);
 
-      return true
-      
+      return user;
     } catch (error) {
-      throw error;
+      console.error("Login failed:", error);
+      throw new Error("Login failed. Please check your credentials.");
     }
   }
 
@@ -67,9 +74,20 @@ export class AuthService {
         `${conf.baseURL}/fail`
       );
       console.log("Google Login: ", res);
+
+      // Fetch current user after login
+    const userData = await this.account.get();
+    console.log("User Data: ", userData);
+
+    // Update Zustand store with user data
+    if (userData) {
+      // Assuming you have the 'login' function in your Zustand store
+      useAuthStore.getState().setUser(userData); // Call the 'login' function from your store to set user data
+    }
+
+    return res; // Return the OAuth session (optional)
       return res;
     } catch (error) {
-      console.log(error)
       throw error;
     }
   }
@@ -77,18 +95,17 @@ export class AuthService {
   async getCurrentUser() {
     try {
       return await this.account.get();
-      // console.log("USER: ", user)
     } catch (error) {
-      console.log("Appwrite service :: getCurrentUser :: error: ", error);
+      console.log("Appwrite service :: getCurrentUser :: error: ", error)
     }
-
-    return null;
   }
 
   async logout() {
     try {
       await this.account.deleteSessions();
 
+      const logout = useAuthStore.getState().logout;
+      logout();
     } catch (error) {
       console.log("Appwrite service :: logout :: error: ", error);
     }

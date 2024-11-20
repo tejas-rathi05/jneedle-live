@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import conf from "@/conf/conf";
 import { useQuery } from "@tanstack/react-query";
-import { useAppSelector } from "@/lib/store";
 import Link from "next/link";
 
 import { ChevronRight, Menu } from "lucide-react";
@@ -17,6 +16,7 @@ import {
 import FacebookIcon from "@/components/icons/FacebookIcon";
 import InstagramIcon from "@/components/icons/InstagramIcon";
 import LogoutBtn from "@/components/LogoutBtn";
+import { useAuthStore } from "@/lib/store/auth-store";
 
 const fadeInAnimationVariants = {
   initial: {
@@ -34,7 +34,7 @@ const fadeInAnimationVariants = {
 };
 
 export function SideNav() {
-  const authStatus = useAppSelector((state) => state.auth.status);
+  const { authStatus } = useAuthStore()
 
   const navQuery = useQuery({
     queryKey: ["Pages"],
@@ -115,11 +115,11 @@ export function SideNav() {
                 href={`/login`}
                 className="w-full"
               >
-                <button className="hover:before:bg-white relative h-[50px] w-full overflow-hidden border border-stone-800 bg-stone-800 px-8 text-white shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-white before:transition-all before:duration-500 hover:text-stone-800 hover:before:left-0 hover:before:w-full">
+                <Button variant={'custom'} className="rounded-none">
                   <span className="relative z-10 w-full text-sm tracking-widest flex items-center justify-center">
                     Login
                   </span>
-                </button>
+                </Button>
               </a>
             </div>
           )}
