@@ -1,30 +1,44 @@
-# Redux Toolkit TypeScript Example
+# JNeedle E-commerce Website
 
-This example shows how to integrate Next.js with [Redux Toolkit](https://redux-toolkit.js.org).
+![JNeedle Banner](https://github.com/user-attachments/assets/f1dc79d7-86e4-4f8b-b0d5-a8adefd9030d)
 
-**Redux Toolkit**(also known as "RTK" for short) provides a standardized way to write Redux logic. It includes utilities that help simplify many common use cases, including [store setup](https://redux-toolkit.js.org/api/configureStore), [creating reducers and writing immutable update logic](https://redux-toolkit.js.org/api/createreducer), and even [creating entire "slices" of state at once](https://redux-toolkit.js.org/api/createslice). This example showcases each of these features in conjunction with Next.js.
+The **JNeedle E-commerce Website** provides a seamless shopping experience for customers with a responsive and intuitive interface. It is designed for showcasing luxurious embroidered handbags, with features like product search, secure authentication, and user-friendly navigation.
 
-## Deploy Your Own
+---
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example):
+## 🚀 Features
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-redux&project-name=with-redux&repository-name=with-redux)
+- **User-Friendly Interface**: Simplified shopping experience with responsive design.
+- **Role-Based Authentication**: Secure login and access powered by Appwrite.
+- **Product Showcase**: Elegant display of embroidered handbags.
+- **Search and Filter**: Find products quickly with search and filtering options.
+- **Future Enhancements**: Plans to integrate a payment gateway and wishlist functionality.
 
-## How to Use
+---
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
+## 🛠️ Technologies Used
 
-```bash
-npx create-next-app --example with-redux with-redux-app
-```
+- **Next.js**: Framework for building fast and scalable web applications.
+- **TypeScript**: Ensures a type-safe and maintainable codebase.
+- **Appwrite**: Backend services for authentication and database management.
+- **TanStack Query**: Efficient data fetching, caching, and synchronization.
+- **Tailwind CSS**: Utility-first CSS framework for beautiful and responsive styling.
 
-```bash
-yarn create next-app --example with-redux with-redux-app
-```
+---
 
-```bash
-pnpm create next-app --example with-redux with-redux-app
-```
+## 📸 Screenshots
 
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
-# jneedle-live
+### Home Page
+![Home Page](https://github.com/user-attachments/assets/2b4b6fb0-2af8-4361-b624-40b1fa706d58)
+
+### Product Listing
+![Product Listing](https://github.com/user-attachments/assets/ecd433d7-5e27-4f9c-acf5-a6bd2868e79e)
+
+### Product Details
+![Product Details](https://github.com/user-attachments/assets/2f77c6c0-d9cc-4424-8fd4-8fb15e49363c)
+
+### User Cart
+![User Cart](https://github.com/user-attachments/assets/2ac54264-ebd5-4484-88e4-56b8c25679cb)
+
+---
+
