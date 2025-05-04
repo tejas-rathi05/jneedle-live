@@ -12,8 +12,6 @@ import "./globals.css";
 import Footer from "@/components/Footer";
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import QueryProvider from "@/components/QueryProvider";
 import { Toaster } from "sonner";
 import ProgressBarProvider from "@/components/ProgressBarProvider";

@@ -28,7 +28,7 @@
     "@radix-ui/react-tooltip": "^1.0.7",
     "@shadcn/ui": "^0.0.4",
     "@suspensive/react-query": "^2.14.0",
-    "@tanstack/react-query": "^5.51.11",
+    "@tanstack/react-query": "^5.75.2",
     "@tanstack/react-query-devtools": "^5.51.11",
     "@tanstack/react-table": "^8.17.3",
     "algoliasearch": "^4.24.0",

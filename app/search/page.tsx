@@ -3,15 +3,14 @@
 import { useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 import { TfiLayoutGrid2Alt, TfiLayoutGrid3Alt } from "react-icons/tfi";
-import {motion} from "framer-motion";
-
+import { motion } from "framer-motion";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import { Skeleton } from "@/components/ui/skeleton";
 import conf from "@/conf/conf";
 import ProductCard from "@/components/ProductCard";
 import { useQuery } from "@tanstack/react-query";
 import { ProductDetails } from "@/types";
-
+import { Suspense } from "react";
 
 const fadeInAnimationVariants = {
   initial: {
@@ -28,7 +27,13 @@ const fadeInAnimationVariants = {
   }),
 };
 
-const page = () => {
+const Page = () => {
+  <Suspense>
+    <PageContent />
+  </Suspense>;
+};
+
+const PageContent = () => {
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("q");
   const [grid, setGrid] = useState("lg");
@@ -36,19 +41,18 @@ const page = () => {
   const fetchSuggestionsQuery = useQuery({
     queryKey: ["search", searchQuery],
     queryFn: async () => {
+      if (!searchQuery) return []; // Handle case where no query is present
       const res = await fetch(`${conf.baseURL}/api/search`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ query: searchQuery}),
+        body: JSON.stringify({ query: searchQuery }),
       });
 
       return res.json();
-    }
-  })
-
-  console.log(fetchSuggestionsQuery)
+    },
+  });
 
   const handleProductGrid = (size: string) => {
     setGrid(size);
@@ -59,14 +63,15 @@ const page = () => {
       <h2 className="text-4xl font-light tracking-wider text-center mb-5">
         SEARCH
       </h2>
-      {
-        fetchSuggestionsQuery.isSuccess && (
-          <p className="text-center mb-10 text-sm text-gray-600">{fetchSuggestionsQuery.data.length} results from &quot;{searchQuery}&quot;</p>
-        )
-      }
+      {fetchSuggestionsQuery.isSuccess && (
+        <p className="text-center mb-10 text-sm text-gray-600">
+          {fetchSuggestionsQuery.data.length} results from &quot;{searchQuery}
+          &quot;
+        </p>
+      )}
       <div className="flex flex-col items-center justify-center w-full gap-6">
-        <div className="w-full h-full flex justify-between  border-y">
-          <div className="hidden md:flex items-center justify-center py-3 gap-5 px-10 border-r ">
+        <div className="w-full h-full flex justify-between border-y">
+          <div className="hidden md:flex items-center justify-center py-3 gap-5 px-10 border-r">
             <button
               className={`${grid === "sm" ? "text-black" : "text-black/40"}`}
               onClick={() => handleProductGrid("sm")}
@@ -81,7 +86,6 @@ const page = () => {
               <TfiLayoutGrid3Alt size={17} />
             </button>
           </div>
-          
         </div>
         <MaxWidthWrapper className="flex items-center justify-center">
           <div className="w-full h-full">
@@ -93,12 +97,12 @@ const page = () => {
                     : "grid-cols-1 lg:grid-cols-2 gap-x-2 gap-y-6 justify-items-center items-center"
                 } mx-auto`}
               >
-                <Skeleton className="w-80 h-80 sm:w-96 sm:h-96 lg:w-80 lg:h-80" />
-                <Skeleton className="w-80 h-80 sm:w-96 sm:h-96 lg:w-80 lg:h-80" />
-                <Skeleton className="w-80 h-80 sm:w-96 sm:h-96 lg:w-80 lg:h-80" />
-                <Skeleton className="w-80 h-80 sm:w-96 sm:h-96 lg:w-80 lg:h-80" />
-                <Skeleton className="w-80 h-80 sm:w-96 sm:h-96 lg:w-80 lg:h-80" />
-                <Skeleton className="w-80 h-80 sm:w-96 sm:h-96 lg:w-80 lg:h-80" />
+                {[...Array(6)].map((_, index) => (
+                  <Skeleton
+                    key={index}
+                    className="w-80 h-80 sm:w-96 sm:h-96 lg:w-80 lg:h-80"
+                  />
+                ))}
               </div>
             ) : (
               <div
@@ -108,10 +112,10 @@ const page = () => {
                     : "grid-cols-1 lg:grid-cols-2 gap-x-2 gap-y-6"
                 }`}
               >
-                {fetchSuggestionsQuery.isSuccess && fetchSuggestionsQuery.data.map(
+                {fetchSuggestionsQuery.data.map(
                   (product: ProductDetails, index: number) => (
                     <motion.div
-                    key={index}
+                      key={product?.$id}
                       variants={fadeInAnimationVariants}
                       initial="initial"
                       whileInView="animate"
@@ -130,7 +134,7 @@ const page = () => {
         </MaxWidthWrapper>
       </div>
     </section>
-  )
+  );
 };
 
-export default page;
+export default Page;
