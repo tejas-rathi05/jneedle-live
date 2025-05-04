@@ -47,8 +47,8 @@ interface ProductImagesProps {
 const Page: FC<PageProps> = ({ params }) => {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { authStatus, user } = useAuthStore()
-  const { addToCart } = useCartStore()
+  const { authStatus, user } = useAuthStore();
+  const { addToCart } = useCartStore();
   const [quantity, setQuantity] = useState<number>(1);
   const [productImages, setProductImages] = useState<ProductImagesProps[]>([]);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -72,7 +72,6 @@ const Page: FC<PageProps> = ({ params }) => {
       return data;
     },
   });
-
 
   const increaseQuantity = () => setQuantity((prev) => prev + 1);
   const decreaseQuantity = () => {
@@ -193,6 +192,16 @@ const Page: FC<PageProps> = ({ params }) => {
                 <p className="my-3 text-sm">MRP inclusive of all taxes.</p>
               </div>
 
+              <div className="pb-10">
+                <p className="font-semibold text-sm mb-2">Color: </p>
+                <div
+                  className="size-10 rounded-full ring-1 ring-gray-800"
+                  style={{
+                    background: productQuery.data.color,
+                  }}
+                />
+              </div>
+
               <div className="flex border">
                 <Button
                   variant={"ghost"}
@@ -219,7 +228,7 @@ const Page: FC<PageProps> = ({ params }) => {
               <div className="w-full h-full my-10">
                 <Button
                   disabled={createCartMutation.isPending}
-                  variant={'custom'}
+                  variant={"custom"}
                   className="rounded-none h-14"
                   onClick={() => createCartMutation.mutate()}
                 >

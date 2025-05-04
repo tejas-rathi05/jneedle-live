@@ -203,10 +203,11 @@ export class Service {
 
   async getFilePreview(fileId: string) {
     try {
-      const resultURL = await this.bucket.getFilePreview(
+      const resultURL = await this.bucket.getFileView(
         conf.appwriteBucketId,
         fileId
       );
+      console.log("File preview url: ", resultURL.href)
       return resultURL.href;
     } catch (error) {
       console.log("Appwrite service :: uploadFile :: error: ", error);
